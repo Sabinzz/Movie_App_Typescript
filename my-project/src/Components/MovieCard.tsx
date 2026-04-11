@@ -1,22 +1,36 @@
+import { Icon } from '@iconify/react'
 import React from 'react'
 
 interface MovieCardProps {
-  movieDetail: {
-    id: number
-    title: string
-    poster_path: string | null
-    release_date: string
-    runtime: number
-  }
+  id: number
+  title: string
+  poster_path: string | null
+  release_date: string
+  runtime: number
+  overview:string
 }
 
-const MovieCard = ({ movieDetail }: MovieCardProps) => {
+interface cardProps {
+  movieDetail: MovieCardProps
+  onClose(): void
+}
+
+const MovieCard = ({ movieDetail, onClose }: cardProps) => {
+  console.log(movieDetail)
   return (
-    <div className='w-[65vw] bg-[#181818] absolute top-0 -translate-y-40 left-60 h-[95vh] flex justify-center'>
-      
-      <div>
+
+
+    <div //IT covers whole page
+      onClick={onClose}
+      className="fixed inset-0 bg-black/70 flex justify-center backdrop-blur-sm transition-all duration-300 z-50"
+    >
+    
+      <div
+        onClick={(e) => e.stopPropagation()}//stops it to be clicked deep
+        className="relative w-[65vw] overflow-auto bg-[#020916] rounded-xl"
+      >
         <img
-          className='h-80 w-[65vw] object-cover rounded-xl cursor-pointer'
+          className='max-h-[70vh] w-full object-cover object-top rounded-xl'
           src={
             movieDetail.poster_path
               ? `https://image.tmdb.org/t/p/w500${movieDetail.poster_path}`
@@ -24,10 +38,40 @@ const MovieCard = ({ movieDetail }: MovieCardProps) => {
           }
           alt={movieDetail.title}
         />
+          <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/60 to-transparent rounded-xl"></div>
+        <div
+          onClick={onClose}
+          className='absolute top-3 right-3 cursor-pointer bg-[#181818] rounded-full p-2'
+        >
+          <Icon icon="basil:cross-outline" color='white' fontSize={30} />
+       
+        </div>
+        <div className='w-27 h-10 bg-white flex items-center gap-1 px-3 rounded-sm absolute top-100 left-5 translate-y-10'>
+<Icon icon="mdi:play" fontSize={34}/>
+<h1 className='font-semibold text-xl'>Play</h1>
+        </div>
+        <div className='w-10 z-10 h-11 p-0.5  border-2 rounded-lg border-[#7A7A7A] absolute top-100 left-35 translate-y-10'>
+<Icon icon="mdi-light:plus" color='white' fontSize={32}/>
+        </div>
+        <div className='w-10 z-10 h-11 p-1  border-2 rounded-lg border-[#7A7A7A] absolute top-100 left-48 translate-y-10'>
+<Icon icon="ei:like" color='white' fontSize={30}/>
+        </div>
+{/* Detail Section */}
+<div>
+  <div className='mt-3 ml-2'>
+    <h1 className='text-white z-100 absolute text-2xl font-semibold '>{movieDetail.title}</h1>
+  </div>
+  <div className='flex text-zinc-400 absolute z-100 bottom-35 left-3 gap-4'>
+    <h1>{movieDetail.release_date.split("-")[0]}</h1>
+<h1>{movieDetail.runtime}m</h1>
 
-        
+  </div>
+  <div className='text-white absolute z-100 bottom-20'>
+    <h1>{movieDetail.overview}</h1>
+  </div>
+</div>
+
       </div>
-
     </div>
   )
 }

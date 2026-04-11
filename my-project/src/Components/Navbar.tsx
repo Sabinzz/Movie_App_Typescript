@@ -41,7 +41,8 @@ const res=await axios.get('https://api.themoviedb.org/3/search/movie'
     )
 
     setmovieDetail(detailedMovies)
-    console.log(detailedMovies)
+  
+   
 
 seterror(false)
     }

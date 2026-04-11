@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import MovieCard from './MovieCard'
 
 interface Movie {
@@ -10,16 +10,21 @@ interface Movie {
 }
 
 interface Props {
-  movieDetail: Movie[]
+  movieDetail: Movie[]//we used movie[] beacause we have used movieDetail as an array here
 }
 
 const ShowMovie = ({ movieDetail }: Props) => {
+  const [showMovieCard, setshowMovieCard] = useState<Movie |null>(null)
+  const [openCard, setopenCard] = useState<boolean>(false)
   return (
     <div className='grid grid-cols-2 relative md:grid-cols-4 lg:grid-cols-6 gap-4 px-5 mt-10'>
       {movieDetail.map((movie) => (
         <div className='rounded-lg' key={movie.id}>
-            <div className='relative'>
+            <div 
+          
+            className='relative'>
  <img
+   onClick={()=>setshowMovieCard(movie)}
             className='h-[30vh] w-full object-cover rounded-xl mt-5 hover:brightness-50 hover:scale-103 cursor-pointer'
             src={
               movie.poster_path
@@ -28,6 +33,7 @@ const ShowMovie = ({ movieDetail }: Props) => {
             }
             alt={movie.title}
           />
+        
           <div className='bg-white w-8 h-5 pl-1.5 rounded-sm absolute top-2 right-2'>
             <p className='text-sm font-semibold'>HD</p>
           </div>
@@ -58,6 +64,7 @@ const ShowMovie = ({ movieDetail }: Props) => {
 </div>
         </div>
       ))}
+        {showMovieCard && <MovieCard movieDetail={showMovieCard} onClose={()=>{setshowMovieCard(null)}}/>}
     </div>
   )
 }
