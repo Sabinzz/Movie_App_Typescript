@@ -16,7 +16,7 @@ interface cardProps {
 }
 
 const MovieCard = ({ movieDetail, onClose }: cardProps) => {
-  console.log(movieDetail)
+
   return (
 
 
@@ -57,19 +57,23 @@ const MovieCard = ({ movieDetail, onClose }: cardProps) => {
 <Icon icon="ei:like" color='white' fontSize={30}/>
         </div>
 {/* Detail Section */}
-<div>
-  <div className='mt-3 ml-2'>
-    <h1 className='text-white z-100 absolute text-2xl font-semibold '>{movieDetail.title}</h1>
-  </div>
-  <div className='flex text-zinc-400 absolute z-100 bottom-35 left-3 gap-4'>
-    <h1>{movieDetail.release_date.split("-")[0]}</h1>
-<h1>{movieDetail.runtime}m</h1>
+ <div className="p-5 text-white">
+    
+      <h1 className="text-2xl font-semibold relative">
+        {movieDetail.title}
+      </h1>
 
-  </div>
-  <div className='text-white absolute z-100 bottom-20'>
-    <h1>{movieDetail.overview}</h1>
-  </div>
-</div>
+    
+      <div className="flex gap-3 text-zinc-400  mt-1 relative">
+        <span>{movieDetail.release_date.split("-")[0]}</span>
+        <span>{movieDetail.runtime}m</span>
+      </div>
+
+   
+      <p className="mt-2 text-white leading-tight relative">
+        {movieDetail.overview}
+      </p>
+    </div>
 
       </div>
     </div>

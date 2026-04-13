@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import  { useState } from 'react'
 import MovieCard from './MovieCard'
 
 interface Movie {
@@ -7,6 +7,7 @@ interface Movie {
   poster_path: string | null
   release_date:string
   runtime:number;
+  overview:string
 }
 
 interface Props {
@@ -15,7 +16,7 @@ interface Props {
 
 const ShowMovie = ({ movieDetail }: Props) => {
   const [showMovieCard, setshowMovieCard] = useState<Movie |null>(null)
-  const [openCard, setopenCard] = useState<boolean>(false)
+  
   return (
     <div className='grid grid-cols-2 relative md:grid-cols-4 lg:grid-cols-6 gap-4 px-5 mt-10'>
       {movieDetail.map((movie) => (

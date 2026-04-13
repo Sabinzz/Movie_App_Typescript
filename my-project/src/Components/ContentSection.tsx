@@ -28,7 +28,7 @@ className='text-[#6C757D] text-sm'>FILTER</h1>
     filter ? "max-h-96 opacity-100 mt-4" : "max-h-0 opacity-0"
   }`}
 >
-  <Filter />
+  <Filter/>
 </div>
 <div>
     <ShowMovie movieDetail={movieDetail}/>
