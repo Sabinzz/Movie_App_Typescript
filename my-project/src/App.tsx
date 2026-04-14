@@ -1,5 +1,6 @@
 
 
+import { ToastContainer } from 'react-toastify'
 import ContentSection from './Components/ContentSection'
 import MovieContext from './Context/MovieContext'
 import BossPage from './Main/BossPage'
@@ -10,6 +11,7 @@ function App() {
   <MovieContext>
    <BossPage/>
    </MovieContext>
+   <ToastContainer/>
    
    </>
   )

@@ -25,7 +25,7 @@ const ShowMovie = ({ movieDetail }: Props) => {
  const{loading}=showMovieContext
   return (
    <div>
-     <div className='grid grid-cols-2 relative md:grid-cols-4 lg:grid-cols-6 gap-4 px-5 mt-10'>
+     <div className='grid grid-cols-1 sm:grid-cols-2 relative md:grid-cols-4 xs:grid-cols-1 lg:grid-cols-6 gap-4 px-5 mt-10'>
     {loading?
     Array.from({length:12}).map((_,index)=>(
       <div key={index} className="animate-pulse">

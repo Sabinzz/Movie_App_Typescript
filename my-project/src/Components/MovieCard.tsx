@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react'
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 
 interface MovieCardProps {
   id: number
@@ -19,6 +20,7 @@ interface cardProps {
 const MovieCard = ({ movieDetail, onClose }: cardProps) => {
   const [trailerKey, settrailerKey] = useState<string | null>(null)
 const playTrailer = async (movieId: number) => {
+
   try {
     const res = await axios.get(
       `https://api.themoviedb.org/3/movie/${movieId}/videos`,
@@ -37,11 +39,22 @@ console.log(res.data.results)
     if (trailer) {
       settrailerKey(trailer.key);
     }
+    else{
+      settrailerKey("")
+    }
 
   } catch (error) {
     console.error("Trailer fetch failed", error);
   }
 };
+useEffect(() => {
+
+if(trailerKey===""){
+  toast.error("Trailer not found")
+}
+}, [trailerKey])
+
+
 
   return (
 
@@ -74,16 +87,16 @@ console.log(res.data.results)
         </div>
         <div 
         onClick={()=>{
-          settrailerKey(null)
+         
           playTrailer(movieDetail.id)}}
-        className='w-27 h-10 cursor-pointer bg-white flex items-center gap-1 px-3 rounded-sm absolute top-100 left-5 translate-y-10'>
-<Icon icon="mdi:play" fontSize={34}/>
-<h1 className='font-semibold text-xl'>Play</h1>
+        className='w-35 h-11 cursor-pointer bg-white flex items-center gap-1 px-3 rounded-sm absolute top-99 left-5 translate-y-10'>
+<Icon icon="mdi:play" fontSize={45}/>
+<h1 className='font-semibold text-lg whitespace-nowrap'>Play Trailer</h1>
         </div>
-        <div className='w-10 z-10 h-11 p-0.5  border-2 rounded-lg border-[#7A7A7A] absolute top-100 left-35 translate-y-10'>
+        <div className='w-10 z-10 h-11 px-0.75 py-1   border-2 rounded-lg border-[#7A7A7A] absolute top-99 left-44 translate-y-10'>
 <Icon icon="mdi-light:plus" color='white' fontSize={32}/>
         </div>
-        <div className='w-10 z-10 h-11 p-1  border-2 rounded-lg border-[#7A7A7A] absolute top-100 left-48 translate-y-10'>
+        <div className='w-10 z-10 h-11 p-1  border-2 rounded-lg border-[#7A7A7A] absolute top-99 left-57 translate-y-10'>
 <Icon icon="ei:like" color='white' fontSize={30}/>
         </div>
 {/* Detail Section */}
