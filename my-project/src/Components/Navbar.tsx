@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import NavImg from '../assets/Nav.png'
 import { Icon } from '@iconify/react'
 import axios from 'axios'
@@ -13,26 +13,35 @@ const Navbar = () => {
   if(!searchContext){
     throw new Error("shit cant search")
   }
-  const{movieName,setmovieName}=searchContext
+  const{movieName,setmovieName,page,setpage,loading, setloading}=searchContext
   const [error, seterror] = useState<boolean>(false)
 const context=useContext(movieContext)
 if(!context){
 throw new Error("useMovieContext must be used inside MovieContextProvider")
 }
 const{movieDetail,setmovieDetail}=context
+useEffect(() => {
+  if(movieName){
+    handleMovieApi()
+  }
+}, [page])
+
   const handleMovieApi=async()=>{
       if (!movieName.trim()) return;
+      setloading(true)
     try{
 const res=await axios.get('https://api.themoviedb.org/3/search/movie'
 ,{
   params:{
     api_key:'50e506c1eb5aff5ab14c27ea3bebb47e',
-    query:movieName
+    query:movieName,
+    page:page
   }
 }
  
 
 )
+
  const movies = res.data.results
   const detailedMovies = await Promise.all(
       movies.map(async (movie: any) => {
@@ -53,6 +62,7 @@ const res=await axios.get('https://api.themoviedb.org/3/search/movie'
     )
 
     setmovieDetail(detailedMovies)
+    setloading(false)
   
    
 
@@ -67,7 +77,7 @@ seterror(true)
 
   return (
     <div>
-      <div className='w-full h-20 bg-[#0F1622]'>
+     <div className='w-full h-20 bg-[#0F1622]'>
       <div className='flex justify-between items-center h-full'>
         <div>
           <img className='h-8 ml-10 object-cover' src={NavImg} alt="" />
@@ -81,6 +91,8 @@ seterror(true)
               placeholder='Enter keywords...'
               onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{
 setmovieName(e.target.value)
+setpage(1)
+
 
               }}
 onKeyDown={(e) => {

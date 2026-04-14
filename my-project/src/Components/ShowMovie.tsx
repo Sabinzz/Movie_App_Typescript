@@ -1,5 +1,7 @@
-import  { useState } from 'react'
+import  { useContext, useState } from 'react'
 import MovieCard from './MovieCard'
+import Page from '../Pagination/Page'
+import { movieContext } from '../Context/MovieContext'
 
 interface Movie {
   id: number
@@ -16,10 +18,23 @@ interface Props {
 
 const ShowMovie = ({ movieDetail }: Props) => {
   const [showMovieCard, setshowMovieCard] = useState<Movie |null>(null)
-  
+ const showMovieContext=useContext(movieContext)
+ if(!showMovieContext){
+  throw new Error("cant load")
+ }
+ const{loading}=showMovieContext
   return (
-    <div className='grid grid-cols-2 relative md:grid-cols-4 lg:grid-cols-6 gap-4 px-5 mt-10'>
-      {movieDetail.map((movie) => (
+   <div>
+     <div className='grid grid-cols-2 relative md:grid-cols-4 lg:grid-cols-6 gap-4 px-5 mt-10'>
+    {loading?
+    Array.from({length:12}).map((_,index)=>(
+      <div key={index} className="animate-pulse">
+          <div className="h-[30vh] bg-gray-500 rounded-xl mt-5"></div>
+          <div className="h-4 bg-gray-500 mt-3 w-3/4 rounded"></div>
+          <div className="h-4 bg-gray-500 mt-2 w-1/2 rounded"></div>
+        </div>
+    )):
+    movieDetail.map((movie) => (
         <div className='rounded-lg' key={movie.id}>
             <div 
           
@@ -66,7 +81,12 @@ const ShowMovie = ({ movieDetail }: Props) => {
         </div>
       ))}
         {showMovieCard && <MovieCard movieDetail={showMovieCard} onClose={()=>{setshowMovieCard(null)}}/>}
+        
     </div>
+{movieDetail &&
+    <Page/>
+}
+   </div>
   )
 }
 

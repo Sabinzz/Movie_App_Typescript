@@ -16,7 +16,8 @@ const Filter = () => {
     if(!contextYear){
         throw new Error("shit Year")
     }
-    const{selectedYear,setselectedYear}=contextYear
+    const{selectedYear,setselectedYear,isOlder, setisOlder}=contextYear
+
 
 
     const context=useContext(movieContext)
@@ -92,14 +93,14 @@ const Filter = () => {
         <div className='flex gap-2 text-[16px]'>
             <input 
             checked={selectedYear===2026}
-            onChange={()=>setselectedYear(2026)}
+            onChange={()=>{setselectedYear(2026),  setisOlder(false)}}
             name='Year-Radio' type="radio" id='Movies'/>
             <label htmlFor="Movies" className='text-[#485C67]'>2026</label>
         </div>
         <div className='flex gap-2 text-[16px] '>
             <input
             checked={selectedYear===2025}
-            onChange={()=>setselectedYear(2025)}
+            onChange={()=>{setselectedYear(2025),  setisOlder(false)}}
             name='Year-Radio' type="radio" id='TV Shows'/>
             <label htmlFor="TV Shows" className='text-[#485C67]'>2025</label>
         </div>
@@ -109,28 +110,30 @@ const Filter = () => {
         <div className='flex gap-2 text-[16px]'>
             <input
             checked={selectedYear===2024}
-            onChange={()=>setselectedYear(2024)}
+            onChange={()=>{setselectedYear(2024),  setisOlder(false)}}
             name='Year-Radio' type="radio" id='All'/>
             <label htmlFor="All" className='text-[#485C67]'>2024</label>
         </div>
         <div className='flex gap-2 text-[16px]'>
             <input
             checked={selectedYear===2023}
-            onChange={()=>setselectedYear(2023)}
+            onChange={()=>{setselectedYear(2023),  setisOlder(false)}}
             name='Year-Radio' type="radio" id='Movies'/>
             <label htmlFor="Movies" className='text-[#485C67]'>2023</label>
         </div>
         <div className='flex gap-2 text-[16px]'>
             <input
             checked={selectedYear===2022}
-            onChange={()=>setselectedYear(2022)}
+            onChange={()=>{setselectedYear(2022),  setisOlder(false)}}
             name='Year-Radio' type="radio" id='TV Shows'/>
             <label htmlFor="TV Shows" className='text-[#485C67]'>2022</label>
         </div>
         <div className='flex gap-2 text-[16px]'>
             <input
-            checked={selectedYear===0}
-            onChange={()=>setselectedYear(0)}
+            checked={isOlder}
+            onChange={()=>{setisOlder(true)
+                setselectedYear(null)}
+            }
             name='Year-Radio' type="radio" id='TV Shows'/>
             <label htmlFor="TV Shows" className='text-[#485C67]'>Older</label>
         </div>

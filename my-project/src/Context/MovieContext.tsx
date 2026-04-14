@@ -18,6 +18,12 @@ interface MovieContextProps {
   setselectedYear:React.Dispatch<React.SetStateAction<number | null>>
   movieName:string
   setmovieName:React.Dispatch<React.SetStateAction<string>>
+  page:number
+  setpage:React.Dispatch<React.SetStateAction<number>>
+  loading:boolean
+  setloading:React.Dispatch<React.SetStateAction<boolean>>
+  isOlder:boolean;
+  setisOlder:React.Dispatch<React.SetStateAction<boolean>>
 }
 
 
@@ -29,9 +35,11 @@ const MovieContext = ({ children }: { children: React.ReactNode }) => {
   const [selectedGenre, setselectedGenre] = useState<number[]>([])
   const [selectedYear, setselectedYear] = useState<number | null>(null)
   const [movieName, setmovieName] = useState<string>("")
-
+  const [page, setpage] = useState<number>(1)
+const [loading, setloading] = useState<boolean>(false)
+const [isOlder, setisOlder] = useState<boolean>(false)
   return (
-    <movieContext.Provider value={{ movieDetail, setmovieDetail,selectedGenre, setselectedGenre,selectedYear,setselectedYear,movieName, setmovieName }}>
+    <movieContext.Provider value={{isOlder, setisOlder, loading, setloading,setpage,page,movieDetail, setmovieDetail,selectedGenre, setselectedGenre,selectedYear,setselectedYear,movieName, setmovieName }}>
       {children}
     </movieContext.Provider>
   )

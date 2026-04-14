@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react'
-import React from 'react'
+import axios from 'axios'
+import React, { useState } from 'react'
 
 interface MovieCardProps {
   id: number
@@ -16,6 +17,31 @@ interface cardProps {
 }
 
 const MovieCard = ({ movieDetail, onClose }: cardProps) => {
+  const [trailerKey, settrailerKey] = useState<string | null>(null)
+const playTrailer = async (movieId: number) => {
+  try {
+    const res = await axios.get(
+      `https://api.themoviedb.org/3/movie/${movieId}/videos`,
+      {
+        params: {
+          api_key:'50e506c1eb5aff5ab14c27ea3bebb47e',
+        },
+      }
+    );
+console.log(res.data.results)
+    const trailer = res.data.results.find(
+      (vid: any) =>
+        vid.type === "Trailer" && vid.site === "YouTube"
+    );
+
+    if (trailer) {
+      settrailerKey(trailer.key);
+    }
+
+  } catch (error) {
+    console.error("Trailer fetch failed", error);
+  }
+};
 
   return (
 
@@ -41,12 +67,16 @@ const MovieCard = ({ movieDetail, onClose }: cardProps) => {
           <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/60 to-transparent rounded-xl"></div>
         <div
           onClick={onClose}
-          className='absolute top-3 right-3 cursor-pointer bg-[#181818] rounded-full p-2'
+          className='absolute top-3 right-3 z-30 cursor-pointer bg-[#181818] rounded-full p-2'
         >
           <Icon icon="basil:cross-outline" color='white' fontSize={30} />
        
         </div>
-        <div className='w-27 h-10 bg-white flex items-center gap-1 px-3 rounded-sm absolute top-100 left-5 translate-y-10'>
+        <div 
+        onClick={()=>{
+          settrailerKey(null)
+          playTrailer(movieDetail.id)}}
+        className='w-27 h-10 cursor-pointer bg-white flex items-center gap-1 px-3 rounded-sm absolute top-100 left-5 translate-y-10'>
 <Icon icon="mdi:play" fontSize={34}/>
 <h1 className='font-semibold text-xl'>Play</h1>
         </div>
@@ -75,6 +105,11 @@ const MovieCard = ({ movieDetail, onClose }: cardProps) => {
       </p>
     </div>
 
+      {trailerKey && <iframe src={`https://www.youtube.com/embed/${trailerKey}`} className='w-full z-10 h-[520px] absolute top-0 ' allowFullScreen/>}
+
+
+      
+     
       </div>
     </div>
   )
