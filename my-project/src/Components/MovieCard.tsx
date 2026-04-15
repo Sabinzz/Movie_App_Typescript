@@ -89,14 +89,18 @@ if(trailerKey===""){
         onClick={()=>{
          
           playTrailer(movieDetail.id)}}
-        className='w-35 h-11 cursor-pointer bg-white flex items-center gap-1 px-3 rounded-sm absolute top-99 left-5 translate-y-10'>
+        className='w-35 h-11 cursor-pointer text-black bg-white flex items-center gap-1 px-3 rounded-sm absolute top-99 left-5 translate-y-10'>
 <Icon icon="mdi:play" fontSize={45}/>
 <h1 className='font-semibold text-lg whitespace-nowrap'>Play Trailer</h1>
         </div>
-        <div className='w-10 z-10 h-11 px-0.75 py-1   border-2 rounded-lg border-[#7A7A7A] absolute top-99 left-44 translate-y-10'>
+        <div
+        onClick={()=>toast("Under Production!!!")}
+        className='w-10 z-10 h-11 px-0.75 py-1 cursor-pointer  border-2 rounded-lg border-[#7A7A7A] absolute top-99 left-44 translate-y-10'>
 <Icon icon="mdi-light:plus" color='white' fontSize={32}/>
         </div>
-        <div className='w-10 z-10 h-11 p-1  border-2 rounded-lg border-[#7A7A7A] absolute top-99 left-57 translate-y-10'>
+        <div
+          onClick={()=>toast("Under Production!!!")}
+        className='w-10 z-10 h-11 p-1 cursor-pointer border-2 rounded-lg border-[#7A7A7A] absolute top-99 left-57 translate-y-10'>
 <Icon icon="ei:like" color='white' fontSize={30}/>
         </div>
 {/* Detail Section */}

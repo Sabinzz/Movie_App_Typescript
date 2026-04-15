@@ -58,33 +58,15 @@ const Filter = () => {
     }
     
   return (
-    <div className='flex flex-col px-10 pt-10 gap-6'>
-<div className='flex gap-10'>
-    <h1 className='text-white'>Type:</h1>
-    <div className='flex gap-4'>
-        <div className='flex gap-2 text-[16px]'>
-            <input name='radio-btn' type="radio" id='All'/>
-            <label htmlFor="All" className='text-[#485C67]'>All</label>
-        </div>
-        <div className='flex gap-2 text-[16px]'>
-            <input name='radio-btn' type="radio" id='Movies'/>
-            <label htmlFor="Movies" className='text-[#485C67]'>Movies</label>
-        </div>
-        <div className='flex gap-2 text-[16px]'>
-            <input name='radio-btn' type="radio" id='TV Shows'/>
-            <label htmlFor="TV Shows" className='text-[#485C67]'>TV Shows</label>
-        </div>
+    <div className='flex flex-col px-10 pt-4 gap-6'>
 
-    </div>
-   
-</div>
  <hr className='border border-gray-900'/>
 
 <div className='flex gap-3'>
-    <h1 className='text-white'>Released:</h1>
+    <h1 className='text-(--text)'>Released:</h1>
      <div className='flex gap-4'>
         
-        <div className='flex gap-2 text-[16px]'>
+        <div className='flex gap-2 text-[16px] '>
             <input 
             checked={selectedYear===2026}
             onChange={()=>{setselectedYear(2026)
@@ -145,7 +127,7 @@ const Filter = () => {
  <hr className='border border-gray-900'/>
  {/* Genre */}
 <div className='flex gap-3 items-start ml-1 '>
-    <h1 className='text-white'>Genre:</h1> 
+    <h1 className='text-(--text)'>Genre:</h1> 
     <div className='flex flex-wrap gap-2 items-center'>
     {genre.map((genre)=>(
 

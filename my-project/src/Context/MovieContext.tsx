@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react"
+import React, { createContext, useEffect, useState } from "react"
 
 interface Movie {
   id: number
@@ -24,7 +24,11 @@ interface MovieContextProps {
   setloading:React.Dispatch<React.SetStateAction<boolean>>
   isOlder:boolean;
   setisOlder:React.Dispatch<React.SetStateAction<boolean>>
+theme:Theme
+settheme:React.Dispatch<React.SetStateAction<Theme>>
+toggleTheme:()=>void
 }
+type Theme='dark' | 'light'
 
 
 
@@ -38,8 +42,24 @@ const MovieContext = ({ children }: { children: React.ReactNode }) => {
   const [page, setpage] = useState<number>(1)
 const [loading, setloading] = useState<boolean>(false)
 const [isOlder, setisOlder] = useState<boolean>(false)
+const [theme, settheme] = useState<Theme>(()=>{
+ return (localStorage.getItem("theme") as Theme) || 'dark'
+})
+
+
+useEffect(() => {
+ localStorage.setItem('theme',theme)
+ document.documentElement.setAttribute('data-theme',theme)
+}, [theme])
+
+const toggleTheme=()=>{
+  settheme((prev)=>prev==='dark'?'light':'dark')
+
+}
+
+
   return (
-    <movieContext.Provider value={{isOlder, setisOlder, loading, setloading,setpage,page,movieDetail, setmovieDetail,selectedGenre, setselectedGenre,selectedYear,setselectedYear,movieName, setmovieName }}>
+    <movieContext.Provider value={{theme,toggleTheme,  isOlder, setisOlder, loading, setloading,setpage,page,movieDetail, setmovieDetail,selectedGenre, setselectedGenre,selectedYear,setselectedYear,movieName, setmovieName }}>
       {children}
     </movieContext.Provider>
   )

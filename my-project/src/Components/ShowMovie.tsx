@@ -25,7 +25,7 @@ const ShowMovie = ({ movieDetail }: Props) => {
  const{loading}=showMovieContext
   return (
    <div>
-     <div className='grid grid-cols-1 sm:grid-cols-2 relative md:grid-cols-4 xs:grid-cols-1 lg:grid-cols-6 gap-4 px-5 mt-10'>
+     <div className='grid grid-cols-1  sm:grid-cols-2 relative md:grid-cols-4 xs:grid-cols-1 lg:grid-cols-6 gap-4 px-5 mt-10'>
     {loading?
     Array.from({length:12}).map((_,index)=>(
       <div key={index} className="animate-pulse">
@@ -50,13 +50,13 @@ const ShowMovie = ({ movieDetail }: Props) => {
             alt={movie.title}
           />
         
-          <div className='bg-white w-8 h-5 pl-1.5 rounded-sm absolute top-2 right-2'>
+          <div className='bg-white text-black w-8 h-5 pl-1.5 rounded-sm absolute top-2 right-2'>
             <p className='text-sm font-semibold'>HD</p>
           </div>
             </div>
          
           
-          <h1 className='text-zinc-200 mt-3 whitespace-nowrap'>{movie.title}</h1>
+          <h1 className='text-(--text) mt-3 whitespace-nowrap overflow-x-hidden'>{movie.title}</h1>
 <div className='flex justify-between'>
   
   <div className='flex gap-2 mt-2'>

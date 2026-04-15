@@ -4,6 +4,7 @@ import { Icon } from '@iconify/react'
 import axios from 'axios'
 import ContentSection from './ContentSection'
 import { movieContext } from '../Context/MovieContext'
+import { toast } from 'react-toastify'
 
 
 
@@ -13,7 +14,7 @@ const Navbar = () => {
   if(!searchContext){
     throw new Error("shit cant search")
   }
-  const{movieName,setmovieName,page,setpage,loading, setloading}=searchContext
+  const{movieName,setmovieName,page,setpage,loading, setloading,theme,toggleTheme}=searchContext
   const [error, seterror] = useState<boolean>(false)
 const context=useContext(movieContext)
 if(!context){
@@ -77,17 +78,31 @@ seterror(true)
 
   return (
     <div>
-     <div className='w-full h-20 bg-[#0F1622]'>
+     <div className='w-full h-20 bg-[#0F1622] text-[white]'>
       <div className='flex justify-between items-center h-full'>
         <div>
           <img className='h-8 ml-10 object-cover' src={NavImg} alt="" />
         </div>
+<div>
+  <button
+  onClick={toggleTheme}
+  className='bg-(--suface) p-2 rounded-xl'
+  >
+    <Icon
+        icon={theme === 'dark' ? 'mdi:weather-sunny' : 'mdi:weather-night'}
+        className='text-(--text-muted)'
+        fontSize={22}
+      />
+
+  </button>
+</div>
+
         <div className=' mr-10 flex gap-10 items-center'>
           <div className='relative group'>
             <input
             value={movieName}
               type="text"
-              className='border h-11 w-72 outline-none rounded-full border-black bg-[#3F454E] placeholder:text-[#A3B5BD] pl-12 pr-5 hover:bg-white transition-all duration-300'
+              className='border h-11 text-black w-72 outline-none rounded-full border-black bg-[#3F454E] placeholder:text-[#A3B5BD] pl-12 pr-5 hover:bg-white transition-all duration-300'
               placeholder='Enter keywords...'
               onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{
 setmovieName(e.target.value)
@@ -106,11 +121,13 @@ onKeyDown={(e) => {
               onClick={handleMovieApi}
             />
           </div>
-          <div className='flex items-center gap-1.5 cursor-pointer '>
+          <div
+          onClick={()=>toast("Under Production!!!!")}
+          className='flex items-center gap-1.5 cursor-pointer '>
             <div className='h-8 w-8 bg-[#3F454E] flex items-center justify-center rounded-full'>
-              <Icon icon="mdi:user" className='text-white' fontSize={18} />
+              <Icon icon="mdi:user" className='text-zinc-300' fontSize={18} />
             </div>
-            <h1 className='text-white'>Login</h1>
+            <h1 className='text-zinc-300'>Login</h1>
           </div>
 
         </div>

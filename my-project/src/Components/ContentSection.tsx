@@ -9,18 +9,18 @@ interface MovieDetailProps{
 const ContentSection = ({movieDetail}:MovieDetailProps) => {
     const [filter, setfilter] = useState<boolean>(false)
   return (
-   <div className='bg-[#020916] min-h-screen w-full'>
+   <div className='bg-(--bg) text-(--text) min-h-screen w-full'>
     <div className='flex justify-between px-10  pt-5'>
 <div>
-    <h1 className='text-[#DAECEF]  border-b border-gray-600 text-2xl'>Popular Movies</h1>
+    <h1 className='text-(--text)  border-b border-gray-600 text-2xl'>Popular Movies</h1>
 </div>
 <div onClick={()=>{
     setfilter(!filter)
 }} className='h-7 cursor-pointer w-20 bg-[#141E2D] flex items-center pl-2 gap-1'>
-<Icon className='text-[#6C757D]' fontSize={16} icon="mdi:filter"/>
+<Icon className='text-zinc-200' fontSize={16} icon="mdi:filter"/>
 <h1
 
-className='text-[#6C757D] text-sm'>FILTER</h1>
+className='text-zinc-200 text-sm'>FILTER</h1>
 </div>
     </div>
   <div
