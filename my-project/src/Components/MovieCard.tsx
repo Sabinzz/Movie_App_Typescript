@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react'
 import axios from 'axios'
-import  { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
 interface MovieCardProps {
@@ -46,10 +46,9 @@ const MovieCard = ({ movieDetail, onClose }: cardProps) => {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-[65vw] max-h-[90vh] overflow-y-auto bg-[#020916] rounded-xl flex flex-col"
+        className="w-[95vw] sm:w-[65vw] max-h-[90vh] overflow-y-auto bg-[#020916] rounded-xl flex flex-col"
       >
-        {/* Media area — poster or trailer */}
-        <div className="relative w-full h-[55vh] shrink-0">
+        <div className="relative w-full h-[35vh] sm:h-[55vh] shrink-0">
           {trailerKey ? (
             <>
               <iframe
@@ -58,7 +57,6 @@ const MovieCard = ({ movieDetail, onClose }: cardProps) => {
                 allowFullScreen
                 allow="autoplay"
               />
-           
               <div
                 onClick={() => setTrailerKey(null)}
                 className="absolute top-3 right-3 cursor-pointer bg-black/60 hover:bg-black/80 rounded-full p-1.5 transition-colors z-10"
@@ -81,7 +79,6 @@ const MovieCard = ({ movieDetail, onClose }: cardProps) => {
             </>
           )}
 
-        
           <div
             onClick={onClose}
             className="absolute top-3 right-3 z-30 cursor-pointer bg-[#181818] rounded-full p-2"
@@ -91,38 +88,38 @@ const MovieCard = ({ movieDetail, onClose }: cardProps) => {
         </div>
 
      
-        <div className="flex items-center gap-3 px-5 py-4 bg-[#020916]">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 px-3 sm:px-5 py-4 bg-[#020916]">
           <button
             onClick={() => playTrailer(movieDetail.id)}
-            className="flex items-center gap-1 px-4 h-10 bg-white text-black rounded-sm cursor-pointer font-semibold text-lg whitespace-nowrap"
+            className="flex items-center gap-1 px-3 sm:px-4 h-9 sm:h-10 bg-white text-black rounded-sm cursor-pointer font-semibold text-sm sm:text-lg whitespace-nowrap"
           >
-            <Icon icon="mdi:play" fontSize={28} />
+            <Icon icon="mdi:play" fontSize={22} />
             Play Trailer
           </button>
 
           <button
             onClick={() => toast('Under Production!!!')}
-            className="w-10 h-10 flex items-center justify-center cursor-pointer border-2 rounded-lg border-[#7A7A7A]"
+            className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center cursor-pointer border-2 rounded-lg border-[#7A7A7A]"
           >
-            <Icon icon="mdi-light:plus" color="white" fontSize={32} />
+            <Icon icon="mdi-light:plus" color="white" fontSize={28} />
           </button>
 
           <button
             onClick={() => toast('Under Production!!!')}
-            className="w-10 h-10 flex items-center justify-center cursor-pointer border-2 rounded-lg border-[#7A7A7A]"
+            className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center cursor-pointer border-2 rounded-lg border-[#7A7A7A]"
           >
-            <Icon icon="ei:like" color="white" fontSize={30} />
+            <Icon icon="ei:like" color="white" fontSize={26} />
           </button>
         </div>
 
-      
-        <div className="px-5 pb-5 text-white">
-          <h1 className="text-2xl font-semibold">{movieDetail.title}</h1>
-          <div className="flex gap-3 text-zinc-400 mt-1">
+       
+        <div className="px-3 sm:px-5 pb-5 text-white">
+          <h1 className="text-xl sm:text-2xl font-semibold">{movieDetail.title}</h1>
+          <div className="flex gap-3 text-zinc-400 mt-1 text-sm sm:text-base">
             <span>{movieDetail.release_date.split('-')[0]}</span>
             <span>{movieDetail.runtime}m</span>
           </div>
-          <p className="mt-2 text-white leading-snug">{movieDetail.overview}</p>
+          <p className="mt-2 text-white leading-snug text-sm sm:text-base">{movieDetail.overview}</p>
         </div>
       </div>
     </div>
