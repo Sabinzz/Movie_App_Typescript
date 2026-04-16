@@ -56,7 +56,7 @@ const ShowMovie = ({ movieDetail }: Props) => {
             </div>
          
           
-          <h1 className='text-(--text) mt-3 whitespace-nowrap overflow-x-hidden'>{movie.title}</h1>
+          <h1 className='text-(--text) mt-3 line-clamp-1'>{movie.title}</h1>
 <div className='flex justify-between'>
   
   <div className='flex gap-2 mt-2'>

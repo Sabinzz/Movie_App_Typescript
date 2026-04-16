@@ -6,136 +6,216 @@ import ContentSection from './ContentSection'
 import { movieContext } from '../Context/MovieContext'
 import { toast } from 'react-toastify'
 
-
-
 const Navbar = () => {
- const searchContext=useContext(movieContext)
+  const searchContext = useContext(movieContext)
 
-  if(!searchContext){
+  if (!searchContext) {
     throw new Error("shit cant search")
   }
-  const{movieName,setmovieName,page,setpage,loading, setloading,theme,toggleTheme}=searchContext
+
+  const {
+    movieName,
+    setmovieName,
+    page,
+    setpage,
+    loading,
+    setloading,
+    theme,
+    toggleTheme
+  } = searchContext
+
+  const context = useContext(movieContext)
+  if (!context) {
+    throw new Error("useMovieContext must be used inside MovieContextProvider")
+  }
+
+  const { movieDetail, setmovieDetail } = context
+
   const [error, seterror] = useState<boolean>(false)
-const context=useContext(movieContext)
-if(!context){
-throw new Error("useMovieContext must be used inside MovieContextProvider")
-}
-const{movieDetail,setmovieDetail}=context
-useEffect(() => {
-  if(movieName){
-    handleMovieApi()
-  }
-}, [page])
+  const [openSearch, setOpenSearch] = useState(false) // ✅ mobile search state
 
-  const handleMovieApi=async()=>{
-      if (!movieName.trim()) return;
-      setloading(true)
-    try{
-const res=await axios.get('https://api.themoviedb.org/3/search/movie'
-,{
-  params:{
-    api_key:'50e506c1eb5aff5ab14c27ea3bebb47e',
-    query:movieName,
-    page:page
-  }
-}
- 
+  useEffect(() => {
+    if (movieName) {
+      handleMovieApi()
+    }
+  }, [page])
 
-)
+  const handleMovieApi = async () => {
+    if (!movieName.trim()) return
+    setloading(true)
 
- const movies = res.data.results
-  const detailedMovies = await Promise.all(
-      movies.map(async (movie: any) => {
-        const detailRes = await axios.get(
-          `https://api.themoviedb.org/3/movie/${movie.id}`,
-          {
-            params: {
-              api_key: '50e506c1eb5aff5ab14c27ea3bebb47e'
-            }
+    try {
+      const res = await axios.get(
+        'https://api.themoviedb.org/3/search/movie',
+        {
+          params: {
+            api_key: '50e506c1eb5aff5ab14c27ea3bebb47e',
+            query: movieName,
+            page: page
           }
-        )
-
-        return {
-          ...movie,
-          runtime: detailRes.data.runtime
         }
-      })
-    )
+      )
 
-    setmovieDetail(detailedMovies)
-    setloading(false)
-  
-   
+      const movies = res.data.results
 
-seterror(false)
+      const detailedMovies = await Promise.all(
+        movies.map(async (movie: any) => {
+          const detailRes = await axios.get(
+            `https://api.themoviedb.org/3/movie/${movie.id}`,
+            {
+              params: {
+                api_key: '50e506c1eb5aff5ab14c27ea3bebb47e'
+              }
+            }
+          )
+
+          return {
+            ...movie,
+            runtime: detailRes.data.runtime
+          }
+        })
+      )
+
+      setmovieDetail(detailedMovies)
+      setloading(false)
+      seterror(false)
+
+    } catch (error) {
+      seterror(true)
     }
-    catch(error){
-seterror(true)
-    }
-   
-
   }
 
   return (
     <div>
-     <div className='w-full h-20 bg-[#0F1622] text-[white]'>
-      <div className='flex justify-between items-center h-full'>
-        <div>
-          <img className='h-8 ml-10 object-cover' src={NavImg} alt="" />
-        </div>
-<div>
-  <button
-  onClick={toggleTheme}
-  className='bg-(--suface) p-2 rounded-xl'
-  >
-    <Icon
-        icon={theme === 'dark' ? 'mdi:weather-sunny' : 'mdi:weather-night'}
-        className='text-(--text-muted)'
-        fontSize={22}
-      />
+     
+      <div className='w-full h-20 bg-(--surface) text-white'>
+        <div className='flex justify-between items-center h-full'>
 
-  </button>
-</div>
-
-        <div className=' mr-10 flex gap-10 items-center'>
-          <div className='relative group'>
-            <input
-            value={movieName}
-              type="text"
-              className='border h-11 text-black w-72 outline-none rounded-full border-black bg-[#3F454E] placeholder:text-[#A3B5BD] pl-12 pr-5 hover:bg-white transition-all duration-300'
-              placeholder='Enter keywords...'
-              onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{
-setmovieName(e.target.value)
-setpage(1)
-
-
-              }}
-onKeyDown={(e) => {
-  if (e.key === "Enter") handleMovieApi();
-}}
-            />
-            <Icon
-              icon="charm:search"
-              className='absolute top-1/2 left-4 -translate-y-1/2 text-white group-hover:text-black transition-colors duration-200'
-              fontSize={20}
-              onClick={handleMovieApi}
-            />
+      
+          <div>
+            <img className={`h-8 ml-10 object-cover ${theme==='light'? 'invert' : ''}`} src={NavImg} alt="" />
           </div>
-          <div
-          onClick={()=>toast("Under Production!!!!")}
-          className='flex items-center gap-1.5 cursor-pointer '>
-            <div className='h-8 w-8 bg-[#3F454E] flex items-center justify-center rounded-full'>
-              <Icon icon="mdi:user" className='text-zinc-300' fontSize={18} />
+
+        
+          <div className='flex items-center gap-5 mr-5 md:mr-10'>
+
+       
+            <button
+              onClick={toggleTheme}
+              className={`w-14 h-7 flex items-center rounded-full p-1 transition-all duration-300 
+              ${theme === 'dark' ? 'bg-[#3F454E]' : 'bg-[#c1c4c9]'}`}
+            >
+              <div
+                className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-all duration-300 flex items-center justify-center
+                ${theme === 'dark' ? 'translate-x-7' : 'translate-x-0'}`}
+              >
+                <Icon
+                  icon={theme === 'dark' ? 'mdi:weather-night' : 'mingcute:sun-line'}
+                  className="text-black"
+                  fontSize={14}
+                />
+              </div>
+            </button>
+
+        
+            <div className="md:hidden text-(--text)">
+              <Icon
+                icon="charm:search"
+                fontSize={24}
+                className="cursor-pointer"
+                onClick={() => setOpenSearch(true)}
+              />
             </div>
-            <h1 className='text-zinc-300'>Login</h1>
-          </div>
 
+           
+            <div className='relative group hidden md:block'>
+              <input
+                value={movieName}
+                type="text"
+                className='border h-11 text-black w-72 outline-none rounded-full border-black bg-(--elements) placeholder:text-(--text) pl-12 pr-5 hover:bg-white  transition-all duration-300 placeholder:text-black'
+                placeholder='Enter keywords...'
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setmovieName(e.target.value)
+                  setpage(1)
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleMovieApi()
+                }}
+              />
+
+              <Icon
+                icon="charm:search"
+                className='absolute top-1/2 left-4 -translate-y-1/2 text-(--text) group-hover:text-black transition-colors duration-200'
+                fontSize={20}
+                onClick={handleMovieApi}
+              />
+            </div>
+
+     
+            <div
+              onClick={() => toast("Under Production!!!!")}
+              className='hidden md:flex items-center gap-1.5 cursor-pointer'
+            >
+              <div className='h-8 w-8 bg-(--elements) flex items-center justify-center rounded-full'>
+                <Icon icon="mdi:user" className='text-(--text)' fontSize={18} />
+              </div>
+              <h1 className='text-(--text)'>Login</h1>
+            </div>
+
+          </div>
         </div>
       </div>
-    </div>
-    <div>
-      <ContentSection movieDetail={movieDetail}/>
-    </div>
+
+  
+      {openSearch && (
+        <div className="fixed inset-0 z-50 bg-black/80 flex items-start pt-5 px-4">
+
+          <div className="w-full relative">
+            <input
+              value={movieName}
+              type="text"
+              autoFocus
+              placeholder="Search movies..."
+              className="w-full h-12 rounded-full pl-12 pr-12 outline-none text-black bg-white"
+              onChange={(e) => {
+                setmovieName(e.target.value)
+                setpage(1)
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleMovieApi()
+                  setOpenSearch(false)
+                }
+              }}
+            />
+
+            {/* SEARCH ICON */}
+            <Icon
+              icon="charm:search"
+              className="absolute  left-4 top-1/2 -translate-y-1/2 text-black"
+              fontSize={20}
+              onClick={() => {
+                handleMovieApi()
+                setOpenSearch(false)
+              }}
+            />
+
+            {/* CLOSE ICON */}
+            <Icon
+              icon="mdi:close"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-black cursor-pointer"
+              fontSize={22}
+              onClick={() => setOpenSearch(false)}
+            />
+          </div>
+
+        </div>
+      )}
+
+      {/* CONTENT */}
+      <div>
+        <ContentSection movieDetail={movieDetail} />
+      </div>
     </div>
   )
 }

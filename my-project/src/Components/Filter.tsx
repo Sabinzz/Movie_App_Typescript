@@ -147,7 +147,7 @@ type="checkbox" name="genre"  id={String(genre.id)}/>
 <div className='flex gap-2'>
    <FinalMovieFetch/>
     <div className='relative group cursor-pointer'>
-        <button className='group-hover:text-white bg-[#1D2C42] h-7 w-22 pl-5  text-[#6C757D]  rounded-xl transition-colors duration-200'>Close</button>
+        <button className='group-hover:text-white bg-[#1D2C42] h-7 w-22 pl-5  text-(--elements)  rounded-xl transition-colors duration-200'>Close</button>
         <Icon icon="charm:cross" className='group-hover:text-white absolute top-1  -translate-x-1 left-3 text-[#6C757D] transition-colors duration-200' fontSize={22}/>
     </div>
 
