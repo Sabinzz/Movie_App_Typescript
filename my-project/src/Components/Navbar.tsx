@@ -134,7 +134,7 @@ const Navbar = () => {
               <input
                 value={movieName}
                 type="text"
-                className='border h-11 text-black w-72 outline-none rounded-full border-black bg-(--elements) placeholder:text-black pl-12 pr-5 hover:bg-white  transition-all duration-300'
+                className='border h-11 text-black w-72 outline-none rounded-full border-black bg-(--elements) placeholder:text-(--text) hover:placeholder:text-black pl-12 pr-5 hover:bg-white  transition-all duration-500'
                 placeholder='Enter keywords...'
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setmovieName(e.target.value)
