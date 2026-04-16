@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react'
-import React, { useContext, useEffect } from 'react'
+import  { useContext, useEffect } from 'react'
 import { movieContext } from '../Context/MovieContext'
 import axios from 'axios'
 
@@ -9,7 +9,7 @@ const FinalMovieFetch = () => {
         throw new Error("can fetch ")
     }
     
-    const{isOlder,movieDetail,setloading,movieName,page,setpage,selectedGenre,selectedYear,setmovieDetail }=finalContext
+    const{isOlder,setloading,movieName,page,setpage,selectedGenre,selectedYear,setmovieDetail }=finalContext
 useEffect(() => {
     if(!movieName){
  handleFilter()

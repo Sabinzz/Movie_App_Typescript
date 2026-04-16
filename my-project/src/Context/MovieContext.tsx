@@ -26,6 +26,7 @@ interface MovieContextProps {
   setisOlder:React.Dispatch<React.SetStateAction<boolean>>
 theme:Theme
 settheme:React.Dispatch<React.SetStateAction<Theme>>
+
 toggleTheme:()=>void
 }
 type Theme='dark' | 'light'
@@ -59,7 +60,7 @@ const toggleTheme=()=>{
 
 
   return (
-    <movieContext.Provider value={{theme,toggleTheme,  isOlder, setisOlder, loading, setloading,setpage,page,movieDetail, setmovieDetail,selectedGenre, setselectedGenre,selectedYear,setselectedYear,movieName, setmovieName }}>
+    <movieContext.Provider value={{theme,toggleTheme,settheme,  isOlder, setisOlder, loading, setloading,setpage,page,movieDetail, setmovieDetail,selectedGenre, setselectedGenre,selectedYear,setselectedYear,movieName, setmovieName }}>
       {children}
     </movieContext.Provider>
   )

@@ -18,7 +18,7 @@ const Navbar = () => {
     setmovieName,
     page,
     setpage,
-    loading,
+    
     setloading,
     theme,
     toggleTheme
@@ -31,7 +31,7 @@ const Navbar = () => {
 
   const { movieDetail, setmovieDetail } = context
 
-  const [error, seterror] = useState<boolean>(false)
+  const [error, seterror] = useState<string | null>(null)
   const [openSearch, setOpenSearch] = useState(false) // ✅ mobile search state
 
   useEffect(() => {
@@ -43,6 +43,7 @@ const Navbar = () => {
   const handleMovieApi = async () => {
     if (!movieName.trim()) return
     setloading(true)
+    seterror(null)
 
     try {
       const res = await axios.get(
@@ -78,10 +79,11 @@ const Navbar = () => {
 
       setmovieDetail(detailedMovies)
       setloading(false)
-      seterror(false)
+      seterror(null)
 
     } catch (error) {
-      seterror(true)
+      setloading(false)
+      seterror('Unable to fetch movies. Please check your connection and try again.')
     }
   }
 
@@ -132,7 +134,7 @@ const Navbar = () => {
               <input
                 value={movieName}
                 type="text"
-                className='border h-11 text-black w-72 outline-none rounded-full border-black bg-(--elements) placeholder:text-(--text) pl-12 pr-5 hover:bg-white  transition-all duration-300 placeholder:text-black'
+                className='border h-11 text-black w-72 outline-none rounded-full border-black bg-(--elements) placeholder:text-(--text) pl-12 pr-5 hover:bg-white  transition-all duration-300'
                 placeholder='Enter keywords...'
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setmovieName(e.target.value)
@@ -166,7 +168,12 @@ const Navbar = () => {
         </div>
       </div>
 
-  
+      {error && (
+        <div className="mx-10 mt-4 rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-800">
+          {error}
+        </div>
+      )}
+
       {openSearch && (
         <div className="fixed inset-0 z-50 bg-black/80 flex items-start pt-5 px-4">
 

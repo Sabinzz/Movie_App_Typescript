@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react'
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import  { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
 interface MovieCardProps {

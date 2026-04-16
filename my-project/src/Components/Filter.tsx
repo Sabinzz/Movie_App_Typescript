@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react'
 import axios from 'axios'
-import React, { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { movieContext } from '../Context/MovieContext'
 import FinalMovieFetch from '../Main/FinalMovieFetch'
 interface filterProps{
@@ -11,7 +11,7 @@ interface filterProps{
 
 const Filter = () => {
     const [genre, setgenre] = useState<filterProps[]>([])
-    const [error, seterror] = useState<boolean>(false)
+    const [, seterror] = useState<boolean>(false)
     const contextYear=useContext(movieContext)
     if(!contextYear){
         throw new Error("shit Year")
