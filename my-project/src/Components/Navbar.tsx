@@ -196,13 +196,9 @@ useEffect(() => {
               onChange={(e) => {
                 setmovieName(e.target.value)
                 setpage(1)
+                setmode("search")
               }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleMovieApi()
-                  setOpenSearch(false)
-                }
-              }}
+             
             />
 
             {/* SEARCH ICON */}
