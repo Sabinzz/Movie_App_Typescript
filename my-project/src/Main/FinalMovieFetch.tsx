@@ -20,13 +20,13 @@ const FinalMovieFetch = () => {
     mode
   } = finalContext
 
-  // ✅ SINGLE SOURCE OF FETCH (FIXED)
+ 
   useEffect(() => {
     fetchMovies()
   }, [page, selectedGenre, selectedYear, isOlder,mode])
 
   useEffect(() => {
-  setmovieDetail([])   // 🔥 clear old results when mode changes
+  setmovieDetail([])  
   setpage(1)
 }, [mode])
 
@@ -74,7 +74,7 @@ const FinalMovieFetch = () => {
         })
       )
 
-      // ✅ FIXED: Append for infinite scroll in home mode, replace for filters
+    
      setmovieDetail((prev: any[]) => {
   const existingIds = new Set(prev.map(m => m.id))
   const filtered = detailedMovies.filter(m => !existingIds.has(m.id))
