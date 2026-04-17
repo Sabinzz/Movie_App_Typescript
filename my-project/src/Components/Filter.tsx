@@ -14,7 +14,7 @@ const Filter = () => {
   const [, seterror] = useState<boolean>(false)
   const contextYear = useContext(movieContext)
   if (!contextYear) throw new Error("shit Year")
-  const { selectedYear, setselectedYear, isOlder, setisOlder,setmode,setpage,setmovieDetail } = contextYear
+  const { selectedYear, setselectedYear, isOlder, setisOlder,setmode,setpage } = contextYear
 
   const context = useContext(movieContext)
   if (!context) throw new Error("shit Genre")
