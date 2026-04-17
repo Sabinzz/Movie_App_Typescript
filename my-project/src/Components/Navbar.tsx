@@ -18,7 +18,7 @@ const Navbar = () => {
     setmovieName,
     page,
     setpage,
-    
+    mode,
     setloading,
     theme,
     toggleTheme
@@ -29,16 +29,21 @@ const Navbar = () => {
     throw new Error("useMovieContext must be used inside MovieContextProvider")
   }
 
-  const { movieDetail, setmovieDetail } = context
+  const { movieDetail, setmovieDetail,setmode } = context
 
   const [error, seterror] = useState<string | null>(null)
   const [openSearch, setOpenSearch] = useState(false) // ✅ mobile search state
 
-  useEffect(() => {
-    if (movieName) {
-      handleMovieApi()
-    }
-  }, [page])
+useEffect(() => {
+  if (mode !== "search") return
+  if (!movieName.trim()) return
+
+  const delayDebounce = setTimeout(() => {
+    handleMovieApi()
+  }, 500) // wait 500ms after user stops typing
+
+  return () => clearTimeout(delayDebounce)
+}, [movieName,page])
 
   const handleMovieApi = async () => {
     if (!movieName.trim()) return
@@ -138,18 +143,18 @@ const Navbar = () => {
                 placeholder='Enter keywords...'
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setmovieName(e.target.value)
+                  setmode("search")
                   setpage(1)
+                  setmovieDetail([])
                 }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") handleMovieApi()
-                }}
+              
               />
 
               <Icon
                 icon="charm:search"
                 className='absolute top-1/2 left-4 -translate-y-1/2 text-(--text) group-hover:text-black transition-colors duration-200'
                 fontSize={20}
-                onClick={handleMovieApi}
+               
               />
             </div>
 

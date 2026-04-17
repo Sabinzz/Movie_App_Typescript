@@ -8,6 +8,8 @@ interface Movie {
   runtime: number
   overview: string
 }
+type Theme='dark' | 'light'
+type Mode = "home" | "search" | "filter"
 
 interface MovieContextProps {
   movieDetail: Movie[]
@@ -26,10 +28,11 @@ interface MovieContextProps {
   setisOlder:React.Dispatch<React.SetStateAction<boolean>>
 theme:Theme
 settheme:React.Dispatch<React.SetStateAction<Theme>>
-
+setmode:React.Dispatch<React.SetStateAction<Mode>>
+mode:Mode;
 toggleTheme:()=>void
 }
-type Theme='dark' | 'light'
+
 
 
 
@@ -44,8 +47,10 @@ const MovieContext = ({ children }: { children: React.ReactNode }) => {
 const [loading, setloading] = useState<boolean>(false)
 const [isOlder, setisOlder] = useState<boolean>(false)
 const [theme, settheme] = useState<Theme>(()=>{
+  
  return (localStorage.getItem("theme") as Theme) || 'dark'
 })
+const[mode, setmode] = useState<Mode>("home")
 
 
 useEffect(() => {
@@ -60,7 +65,7 @@ const toggleTheme=()=>{
 
 
   return (
-    <movieContext.Provider value={{theme,toggleTheme,settheme,  isOlder, setisOlder, loading, setloading,setpage,page,movieDetail, setmovieDetail,selectedGenre, setselectedGenre,selectedYear,setselectedYear,movieName, setmovieName }}>
+    <movieContext.Provider value={{mode,setmode,theme,toggleTheme,settheme,  isOlder, setisOlder, loading, setloading,setpage,page,movieDetail, setmovieDetail,selectedGenre, setselectedGenre,selectedYear,setselectedYear,movieName, setmovieName }}>
       {children}
     </movieContext.Provider>
   )

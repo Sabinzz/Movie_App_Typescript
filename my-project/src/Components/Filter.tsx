@@ -14,7 +14,7 @@ const Filter = () => {
   const [, seterror] = useState<boolean>(false)
   const contextYear = useContext(movieContext)
   if (!contextYear) throw new Error("shit Year")
-  const { selectedYear, setselectedYear, isOlder, setisOlder } = contextYear
+  const { selectedYear, setselectedYear, isOlder, setisOlder,setmode,setpage,setmovieDetail } = contextYear
 
   const context = useContext(movieContext)
   if (!context) throw new Error("shit Genre")
@@ -35,11 +35,19 @@ const Filter = () => {
     filterGenre()
   }, [])
 
-  function handleGenreChange(id: number) {
-    setselectedGenre((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
-    )
-  }
+ function handleGenreChange(id: number) {
+  setselectedGenre((prev) => {
+    const updated = prev.includes(id)
+      ? prev.filter((i) => i !== id)
+      : [...prev, id]
+
+    setmode("filter")
+    setpage(1)
+    setmovieDetail([])
+
+    return updated
+  })
+}
 
   const years = [2026, 2025, 2024, 2023, 2022]
 
@@ -56,7 +64,13 @@ const Filter = () => {
             <div key={year} className='flex gap-2 items-center text-[15px]'>
               <input
                 checked={selectedYear === year}
-                onChange={() => { setselectedYear(year); setisOlder(false) }}
+                onChange={() => { setselectedYear(year); 
+              setisOlder(false)
+             setmode("filter")
+  setpage(1)
+  setmovieDetail([])
+            
+            }}
                 name='Year-Radio'
                 type="radio"
                 id={String(year)}
@@ -67,7 +81,14 @@ const Filter = () => {
           <div className='flex gap-2 items-center text-[15px]'>
             <input
               checked={isOlder}
-              onChange={() => { setisOlder(true); setselectedYear(null) }}
+              onChange={() => { setisOlder(true); 
+                setselectedYear(null)
+                 setmode("filter")
+  setpage(1)
+  setmovieDetail([])
+
+
+               }}
               name='Year-Radio'
               type="radio"
               id='Older'
@@ -122,3 +143,5 @@ const Filter = () => {
 }
 
 export default Filter
+
+
