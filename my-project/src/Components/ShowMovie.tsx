@@ -27,12 +27,13 @@ const ShowMovie = ({ movieDetail }: Props) => {
 
   const loaderRef = useRef<HTMLDivElement | null>(null)
 
-  // 🔥 NEW: debounce + lock refs
+ 
   const isFetchingRef = useRef(false)
  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  // ✅ DEBOUNCED INTERSECTION OBSERVER
+ 
   useEffect(() => {
+    if (mode !== "home") return
     const observer = new IntersectionObserver(
       (entries) => {
         const target = entries[0]
