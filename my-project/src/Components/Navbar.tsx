@@ -36,14 +36,7 @@ const Navbar = () => {
 
 useEffect(() => {
   if (mode !== "search") return
-  
-  if (!movieName.trim()) {
-    // User cleared search, switch back to home mode
-    setmode("home")
-    setpage(1)
-    setmovieDetail([])
-    return
-  }
+  if (!movieName.trim()) return
 
   const delayDebounce = setTimeout(() => {
     handleMovieApi()
@@ -161,7 +154,7 @@ useEffect(() => {
                 icon="charm:search"
                 className='absolute top-1/2 left-4 -translate-y-1/2 text-(--text) group-hover:text-black transition-colors duration-200'
                 fontSize={20}
-               
+             
               />
             </div>
 
@@ -198,9 +191,7 @@ useEffect(() => {
               className="w-full h-12 rounded-full pl-12 pr-12 outline-none text-black bg-white"
               onChange={(e) => {
                 setmovieName(e.target.value)
-                setmode("search")
                 setpage(1)
-                setmovieDetail([])
               }}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {

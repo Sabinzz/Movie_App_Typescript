@@ -23,7 +23,12 @@ const FinalMovieFetch = () => {
   // ✅ SINGLE SOURCE OF FETCH (FIXED)
   useEffect(() => {
     fetchMovies()
-  }, [page, selectedGenre, selectedYear, isOlder])
+  }, [page, selectedGenre, selectedYear, isOlder,mode])
+
+  useEffect(() => {
+  setmovieDetail([])   // 🔥 clear old results when mode changes
+  setpage(1)
+}, [mode])
 
   async function fetchMovies() {
     if (loading) return
@@ -70,9 +75,14 @@ const FinalMovieFetch = () => {
       )
 
       // ✅ FIXED: Append for infinite scroll in home mode, replace for filters
-      setmovieDetail((prev: any[]) =>
-        mode === "home" && page > 1 ? [...prev, ...detailedMovies] : detailedMovies
-      )
+     setmovieDetail((prev: any[]) => {
+  const existingIds = new Set(prev.map(m => m.id))
+  const filtered = detailedMovies.filter(m => !existingIds.has(m.id))
+
+  return mode === "home" && page > 1
+    ? [...prev, ...filtered]
+    : filtered
+})
 
     } catch (error) {
       console.error("Fetch failed", error)
