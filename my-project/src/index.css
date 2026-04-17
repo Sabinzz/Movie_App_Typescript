@@ -14,3 +14,29 @@
   --text-muted: #6b7280;
   --elements:#c1c4c9;
 }
+#movieCardScroll::-webkit-scrollbar{
+  display:none;
+}
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+
+::-webkit-scrollbar-track {
+  background: #020916;
+}
+
+
+::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 10px;
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+  background: #666;
+}
+body {
+  overflow-x: hidden;
+}

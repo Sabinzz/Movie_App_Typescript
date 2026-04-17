@@ -10,6 +10,7 @@ interface Movie {
   release_date: string
   runtime: number
   overview: string
+    backdrop_path: string | null
 }
 
 interface Props {
@@ -155,7 +156,7 @@ const ShowMovie = ({ movieDetail }: Props) => {
       </div>
 
       {/* Pagination fallback */}
-      {movieDetail && <Page />}
+     {movieDetail && (mode === "search" || mode === "filter") && <Page />}
     </div>
   )
 }

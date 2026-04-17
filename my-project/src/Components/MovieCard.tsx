@@ -10,6 +10,7 @@ interface MovieCardProps {
   release_date: string
   runtime: number
   overview: string
+    backdrop_path: string | null
 }
 
 interface cardProps {
@@ -45,10 +46,11 @@ const MovieCard = ({ movieDetail, onClose }: cardProps) => {
       className="fixed inset-0 bg-black/70 flex justify-center items-center backdrop-blur-sm z-50"
     >
       <div
+      id='movieCardScroll'
         onClick={(e) => e.stopPropagation()}
-        className="w-[95vw] sm:w-[65vw] max-h-[90vh] overflow-y-auto bg-[#020916] rounded-xl flex flex-col"
+        className="w-[99vw] sm:w-[69vw] h-[95vh] overflow-y-auto bg-[#020916] rounded-xl flex flex-col"
       >
-        <div className="relative w-full h-[35vh] sm:h-[55vh] shrink-0">
+        <div className="relative w-full flex-1">
           {trailerKey ? (
             <>
               <iframe
@@ -59,22 +61,24 @@ const MovieCard = ({ movieDetail, onClose }: cardProps) => {
               />
               <div
                 onClick={() => setTrailerKey(null)}
-                className="absolute top-3 right-3 cursor-pointer bg-black/60 hover:bg-black/80 rounded-full p-1.5 transition-colors z-10"
+                className="absolute  top-3 right-3 cursor-pointer bg-black/60 hover:bg-black/80 rounded-full p-1.5 transition-colors z-10"
               >
                 <Icon icon="basil:cross-outline" color="white" fontSize={26} />
               </div>
             </>
           ) : (
             <>
-              <img
-                className="w-full h-full object-cover object-top rounded-t-xl"
-                src={
-                  movieDetail.poster_path
-                    ? `https://image.tmdb.org/t/p/w500${movieDetail.poster_path}`
-                    : '/fallback.jpg'
-                }
-                alt={movieDetail.title}
-              />
+             <img
+  className="w-full h-full object-cover rounded-t-xl"
+  src={
+    movieDetail.backdrop_path
+      ? `https://image.tmdb.org/t/p/original${movieDetail.backdrop_path}`
+      : movieDetail.poster_path
+      ? `https://image.tmdb.org/t/p/w500${movieDetail.poster_path}`
+      : '/fallback.jpg'
+  }
+  alt={movieDetail.title}
+/>
               <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent rounded-t-xl" />
             </>
           )}
