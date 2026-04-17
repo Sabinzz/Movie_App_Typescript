@@ -5,68 +5,39 @@ import axios from 'axios'
 
 const FinalMovieFetch = () => {
   const finalContext = useContext(movieContext)
-  if (!finalContext) throw new Error("can fetch")
+  if (!finalContext) throw new Error("Context not found")
 
   const {
     isOlder,
     loading,
-    mode,
     setloading,
     page,
-    setpage,
     selectedGenre,
     selectedYear,
     setmovieDetail,
-    setmode
+    setpage,
+    setmode,
+    mode
   } = finalContext
 
-  // 🔥 HOME fetch (infinite scroll)
+  // ✅ SINGLE SOURCE OF FETCH (FIXED)
   useEffect(() => {
-    if (mode !== "home") return
     fetchMovies()
-  }, [page])
+  }, [page, selectedGenre, selectedYear, isOlder])
 
-  // 🔥 FILTER fetch
-  useEffect(() => {
-    if (mode !== "filter") return
-    setpage(1)
-    fetchMovies()
-  }, [selectedGenre, selectedYear, isOlder])
-
-  // 🔥 Reset to home once on mount
-  useEffect(() => {
-    setmode("home")
-  }, [])
-
-  const handleScroll = () => {
-    if (loading) return
-    if (mode !== "home") return
-
-    if (
-      window.innerHeight + document.documentElement.scrollTop + 1 >=
-      document.documentElement.scrollHeight
-    ) {
-      setpage((prev) => prev + 1)
-    }
-  }
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [mode, loading])
-
-  // ✅ SINGLE CLEAN FETCH FUNCTION
   async function fetchMovies() {
-    setloading(true)
+    if (loading) return
 
-    const genreQuery = selectedGenre.join(",")
+    setloading(true)
 
     const params: any = {
       api_key: "50e506c1eb5aff5ab14c27ea3bebb47e",
       page: page,
     }
 
-    if (genreQuery) params.with_genres = genreQuery
+    if (selectedGenre.length) {
+      params.with_genres = selectedGenre.join(",")
+    }
 
     if (isOlder) {
       params["primary_release_date.lte"] = "2022-01-01"
@@ -87,9 +58,7 @@ const FinalMovieFetch = () => {
           const detailRes = await axios.get(
             `https://api.themoviedb.org/3/movie/${movie.id}`,
             {
-              params: {
-                api_key: "50e506c1eb5aff5ab14c27ea3bebb47e",
-              },
+              params: { api_key: "50e506c1eb5aff5ab14c27ea3bebb47e" },
             }
           )
 
@@ -100,12 +69,10 @@ const FinalMovieFetch = () => {
         })
       )
 
-      // ✅ IMPORTANT: correct append logic
-      if (mode === "home" && page > 1) {
-        setmovieDetail((prev: any) => [...prev, ...detailedMovies])
-      } else {
-        setmovieDetail(detailedMovies)
-      }
+      // ✅ FIXED: Append for infinite scroll in home mode, replace for filters
+      setmovieDetail((prev: any[]) =>
+        mode === "home" && page > 1 ? [...prev, ...detailedMovies] : detailedMovies
+      )
 
     } catch (error) {
       console.error("Fetch failed", error)
@@ -119,8 +86,8 @@ const FinalMovieFetch = () => {
       <div className='relative'>
         <button
           onClick={() => {
-            setpage(1)
-            fetchMovies()
+            setmode("filter")
+            setpage(1) // 🔥 important reset trigger
           }}
           className='h-7 w-22 pl-5 text-[#212529] rounded-xl bg-[#79C142]'
         >

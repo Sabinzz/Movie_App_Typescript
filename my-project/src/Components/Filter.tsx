@@ -35,18 +35,15 @@ const Filter = () => {
     filterGenre()
   }, [])
 
- function handleGenreChange(id: number) {
-  setselectedGenre((prev) => {
-    const updated = prev.includes(id)
+function handleGenreChange(id: number) {
+  setselectedGenre((prev) =>
+    prev.includes(id)
       ? prev.filter((i) => i !== id)
       : [...prev, id]
+  )
 
-    setmode("filter")
-    setpage(1)
-    setmovieDetail([])
-
-    return updated
-  })
+  setmode("filter")
+setpage(1)
 }
 
   const years = [2026, 2025, 2024, 2023, 2022]
@@ -67,8 +64,8 @@ const Filter = () => {
                 onChange={() => { setselectedYear(year); 
               setisOlder(false)
              setmode("filter")
-  setpage(1)
-  setmovieDetail([])
+setpage(1)
+
             
             }}
                 name='Year-Radio'
@@ -84,8 +81,8 @@ const Filter = () => {
               onChange={() => { setisOlder(true); 
                 setselectedYear(null)
                  setmode("filter")
-  setpage(1)
-  setmovieDetail([])
+ setpage(1)
+
 
 
                }}
