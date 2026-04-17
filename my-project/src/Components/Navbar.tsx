@@ -32,13 +32,13 @@ const Navbar = () => {
   const { movieDetail, setmovieDetail,setmode } = context
 
   const [error, seterror] = useState<string | null>(null)
-  const [openSearch, setOpenSearch] = useState(false) // ✅ mobile search state
+  const [openSearch, setOpenSearch] = useState(false)
 useEffect(() => {
   if (mode === "search") {
     setmovieDetail([])
     setpage(1)
   }
-}, [mode, movieName])
+}, [mode])
 useEffect(() => {
   if (mode !== "search") return
   if (!movieName.trim()) return
