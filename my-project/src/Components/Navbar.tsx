@@ -198,6 +198,12 @@ useEffect(() => {
                 setpage(1)
                 setmode("search")
               }}
+              onKeyDown={(e) => {
+  if (e.key === "Enter") {
+  
+    setOpenSearch(false) 
+  }
+}}
              
             />
 
