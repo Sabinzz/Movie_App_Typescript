@@ -33,17 +33,22 @@ const Navbar = () => {
 
   const [error, seterror] = useState<string | null>(null)
   const [openSearch, setOpenSearch] = useState(false) // ✅ mobile search state
-
+useEffect(() => {
+  if (mode === "search") {
+    setmovieDetail([])
+    setpage(1)
+  }
+}, [mode, movieName])
 useEffect(() => {
   if (mode !== "search") return
   if (!movieName.trim()) return
 
   const delayDebounce = setTimeout(() => {
     handleMovieApi()
-  }, 500) // wait 500ms after user stops typing
+  }, 500)
 
   return () => clearTimeout(delayDebounce)
-}, [movieName,page])
+}, [movieName, mode])
 
   const handleMovieApi = async () => {
     if (!movieName.trim()) return
@@ -144,8 +149,7 @@ useEffect(() => {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setmovieName(e.target.value)
                   setmode("search")
-                  setpage(1)
-                  setmovieDetail([])
+                
                 }}
               
               />
