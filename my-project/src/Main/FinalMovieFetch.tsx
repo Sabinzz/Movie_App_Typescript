@@ -1,4 +1,4 @@
-import { Icon } from '@iconify/react'
+
 import { useContext, useEffect } from 'react'
 import { movieContext } from '../Context/MovieContext'
 import axios from 'axios'
@@ -16,7 +16,7 @@ const FinalMovieFetch = () => {
     selectedYear,
     setmovieDetail,
     setpage,
-    setmode,
+   
     mode
   } = finalContext
 
@@ -93,22 +93,7 @@ const FinalMovieFetch = () => {
 
   return (
     <div>
-      <div className='relative'>
-        <button
-          onClick={() => {
-            setmode("filter")
-            setpage(1) // 🔥 important reset trigger
-          }}
-          className='h-7 w-22 pl-5 text-[#212529] rounded-xl bg-[#79C142]'
-        >
-          Filter
-        </button>
-
-        <Icon
-          className='absolute top-1 left-3 text-black translate-y-0.5'
-          icon="lucide:search"
-        />
-      </div>
+    
     </div>
   )
 }
