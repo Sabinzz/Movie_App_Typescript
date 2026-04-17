@@ -38,7 +38,7 @@ useEffect(() => {
     setmovieDetail([])
     setpage(1)
   }
-}, [mode])
+}, [mode,movieName])
 useEffect(() => {
   if (mode !== "search") return
   if (!movieName.trim()) return
@@ -149,7 +149,7 @@ useEffect(() => {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setmovieName(e.target.value)
                   setmode("search")
-                
+                setpage(1)
                 }}
               
               />
