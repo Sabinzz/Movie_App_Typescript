@@ -38,7 +38,7 @@ useEffect(() => {
     setmovieDetail([])
     setpage(1)
   }
-}, [mode,movieName])
+}, [mode])
 useEffect(() => {
   if (mode !== "search") return
   if (!movieName.trim()) return
@@ -48,7 +48,7 @@ useEffect(() => {
   }, 500)
 
   return () => clearTimeout(delayDebounce)
-}, [movieName, mode])
+}, [movieName, mode,page])
 
   const handleMovieApi = async () => {
     if (!movieName.trim()) return
@@ -202,7 +202,7 @@ useEffect(() => {
   if (e.key === "Enter") {
   
     setOpenSearch(false) 
-    setmovieName("")
+  
   }
 }}
              
