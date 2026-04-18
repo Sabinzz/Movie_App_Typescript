@@ -29,7 +29,7 @@ const Navbar = () => {
     throw new Error("useMovieContext must be used inside MovieContextProvider")
   }
 
-  const { movieDetail, setmovieDetail,setmode } = context
+  const { movieDetail, setmovieDetail,setmode,setselectedGenre,setselectedYear,setisOlder } = context
 
   const [error, seterror] = useState<string | null>(null)
   const [openSearch, setOpenSearch] = useState(false)
@@ -149,6 +149,10 @@ useEffect(() => {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setmovieName(e.target.value)
                   setmode("search")
+  setselectedYear(null)
+  setisOlder(false)
+  setselectedGenre([])
+
                 setpage(1)
                 }}
               
@@ -197,6 +201,9 @@ useEffect(() => {
                 setmovieName(e.target.value)
                 setpage(1)
                 setmode("search")
+                  setselectedYear(null)
+  setisOlder(false)
+  setselectedGenre([])
               }}
               onKeyDown={(e) => {
   if (e.key === "Enter") {

@@ -14,7 +14,7 @@ const Filter = () => {
   const [, seterror] = useState<boolean>(false)
   const contextYear = useContext(movieContext)
   if (!contextYear) throw new Error("shit Year")
-  const { selectedYear, setselectedYear, isOlder, setisOlder,setmode,setpage } = contextYear
+  const { selectedYear,setmovieName, setselectedYear, isOlder, setisOlder,setmode,setpage } = contextYear
 
   const context = useContext(movieContext)
   if (!context) throw new Error("shit Genre")
@@ -61,9 +61,10 @@ setpage(1)
             <div key={year} className='flex gap-2 items-center text-[15px]'>
               <input
                 checked={selectedYear === year}
-                onChange={() => { setselectedYear(year); 
+                onChange={() => {setselectedYear(year) 
               setisOlder(false)
              setmode("filter")
+              setmovieName("")
 setpage(1)
 
             
@@ -81,6 +82,7 @@ setpage(1)
               onChange={() => { setisOlder(true); 
                 setselectedYear(null)
                  setmode("filter")
+                 setmovieName("")
  setpage(1)
 
 
@@ -105,7 +107,10 @@ setpage(1)
             <div key={genre.id} className='flex gap-2 items-center'>
               <input
                 checked={selectedGenre.includes(genre.id)}
-                onChange={() => handleGenreChange(genre.id)}
+                onChange={() => {handleGenreChange(genre.id)
+ setmovieName("")
+
+                }}
                 type="checkbox"
                 name="genre"
                 id={String(genre.id)}
