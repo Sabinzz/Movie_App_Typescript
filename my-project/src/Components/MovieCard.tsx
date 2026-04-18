@@ -48,7 +48,7 @@ const MovieCard = ({ movieDetail, onClose }: cardProps) => {
       <div
       id='movieCardScroll'
         onClick={(e) => e.stopPropagation()}
-        className="w-[99vw] sm:w-[69vw] h-[95vh] overflow-y-auto bg-[#020916] rounded-xl flex flex-col"
+        className="w-[85vw] sm:w-[69vw] h-[90vh] overflow-y-auto bg-[#020916] rounded-xl flex flex-col"
       >
         <div className="relative w-full flex-1">
           {trailerKey ? (

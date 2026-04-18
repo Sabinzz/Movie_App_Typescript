@@ -202,6 +202,7 @@ useEffect(() => {
   if (e.key === "Enter") {
   
     setOpenSearch(false) 
+    setmovieName("")
   }
 }}
              
@@ -223,7 +224,10 @@ useEffect(() => {
               icon="mdi:close"
               className="absolute right-4 top-1/2 -translate-y-1/2 text-black cursor-pointer"
               fontSize={22}
-              onClick={() => setOpenSearch(false)}
+              onClick={() => {setOpenSearch(false)
+setmovieName("")
+
+              }}
             />
           </div>
 
