@@ -22,12 +22,15 @@ const FinalMovieFetch = () => {
 
  
   useEffect(() => {
+    if (mode === "search") return;
     fetchMovies()
   }, [page, selectedGenre, selectedYear, isOlder,mode])
 
   useEffect(() => {
-  setmovieDetail([])  
-  setpage(1)
+  if (mode !== "search") {
+    setmovieDetail([])  
+    setpage(1)
+  }
 }, [mode])
 
   async function fetchMovies() {

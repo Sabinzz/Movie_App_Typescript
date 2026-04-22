@@ -33,22 +33,24 @@ const Navbar = () => {
 
   const [error, seterror] = useState<string | null>(null)
   const [openSearch, setOpenSearch] = useState(false)
-useEffect(() => {
-  if (mode === "search") {
-    setmovieDetail([])
-    setpage(1)
-  }
-}, [mode])
+
 useEffect(() => {
   if (mode !== "search") return
   if (!movieName.trim()) return
 
   const delayDebounce = setTimeout(() => {
     handleMovieApi()
-  }, 500)
+  }, 1000)
 
   return () => clearTimeout(delayDebounce)
-}, [movieName, mode,page])
+}, [movieName])
+useEffect(() => {
+  if (mode !== "search") return
+  if (!movieName.trim()) return
+   if (page === 1) return
+
+  handleMovieApi()
+}, [page])
 
   const handleMovieApi = async () => {
     if (!movieName.trim()) return
@@ -147,13 +149,23 @@ useEffect(() => {
                 className='border h-11 text-black w-72 outline-none rounded-full border-black bg-(--elements) placeholder:text-(--text) hover:placeholder:text-black pl-12 pr-5 hover:bg-white  transition-all duration-500'
                 placeholder='Enter keywords...'
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setmovieName(e.target.value)
-                  setmode("search")
+  const value = e.target.value
+   setmovieName(value)
+                    if (value.trim() === "") {
+    setmode("home")  
+    return
+  }
+               
+                if (mode !== "search") {
+  setmode("search")
   setselectedYear(null)
   setisOlder(false)
   setselectedGenre([])
+}
 
-                setpage(1)
+               if (page !== 1) {
+    setpage(1)
+  }
                 }}
               
               />
