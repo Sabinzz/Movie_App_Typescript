@@ -10,7 +10,7 @@ interface filterProps {
 }
 
 const Filter = () => {
-  const apiKey = import.meta.env.API_KEY
+  const apiKey = import.meta.env.VITE_API_KEY
   const [genre, setgenre] = useState<filterProps[]>([])
   const [, seterror] = useState<boolean>(false)
   const contextYear = useContext(movieContext)

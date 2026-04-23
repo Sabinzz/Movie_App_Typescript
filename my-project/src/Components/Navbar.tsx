@@ -9,7 +9,7 @@ import { toast } from 'react-toastify'
 
 const Navbar = () => {
   const searchContext = useContext(movieContext)
-const apiKey = import.meta.env.API_KEY
+const apiKey = import.meta.env.VITE_API_KEY
 
   if (!searchContext) {
     throw new Error("shit cant search")
@@ -39,6 +39,7 @@ const apiKey = import.meta.env.API_KEY
 useEffect(() => {
   if (mode !== "search") return
   if (!movieName.trim()) return
+    if (movieName.trim().length < 2) return
 
   const delayDebounce = setTimeout(() => {
     handleMovieApi()
@@ -49,7 +50,7 @@ useEffect(() => {
 useEffect(() => {
   if (mode !== "search") return
   if (!movieName.trim()) return
-   if (page === 1) return
+  if (movieName.trim().length < 2) return
 
   handleMovieApi()
 }, [page])
@@ -212,12 +213,23 @@ useEffect(() => {
               placeholder="Search movies..."
               className="w-full h-12 rounded-full pl-12 pr-12 outline-none text-black bg-white"
               onChange={(e) => {
-                setmovieName(e.target.value)
-                setpage(1)
-                setmode("search")
-                  setselectedYear(null)
+                  const value = e.target.value
+   setmovieName(value)
+                    if (value.trim() === "") {
+    setmode("home")  
+    return
+  }
+               
+                if (mode !== "search") {
+  setmode("search")
+  setselectedYear(null)
   setisOlder(false)
   setselectedGenre([])
+}
+
+               if (page !== 1) {
+    setpage(1)
+  }
               }}
               onKeyDown={(e) => {
   if (e.key === "Enter") {

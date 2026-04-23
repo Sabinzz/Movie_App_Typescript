@@ -19,7 +19,7 @@ interface cardProps {
 }
 
 const MovieCard = ({ movieDetail, onClose }: cardProps) => {
-  const apiKey = import.meta.env.API_KEY
+  const apiKey = import.meta.env.VITE_API_KEY
   const [trailerKey, setTrailerKey] = useState<string | null>(null)
 
   const playTrailer = async (movieId: number) => {

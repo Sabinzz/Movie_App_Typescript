@@ -4,7 +4,7 @@ import { movieContext } from '../Context/MovieContext'
 import axios from 'axios'
 
 const FinalMovieFetch = () => {
-  const apiKey = import.meta.env.API_KEY
+  const apiKey = import.meta.env.VITE_API_KEY
   const finalContext = useContext(movieContext)
   if (!finalContext) throw new Error("Context not found")
 
