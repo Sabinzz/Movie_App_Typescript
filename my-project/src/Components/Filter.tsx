@@ -10,6 +10,7 @@ interface filterProps {
 }
 
 const Filter = () => {
+  const apiKey = import.meta.env.API_KEY
   const [genre, setgenre] = useState<filterProps[]>([])
   const [, seterror] = useState<boolean>(false)
   const contextYear = useContext(movieContext)
@@ -25,7 +26,7 @@ const Filter = () => {
       try {
         seterror(false)
         const res = await axios.get("https://api.themoviedb.org/3/genre/movie/list", {
-          params: { api_key: '50e506c1eb5aff5ab14c27ea3bebb47e' }
+          params: { api_key: apiKey }
         })
         setgenre(res.data.genres)
       } catch (error) {

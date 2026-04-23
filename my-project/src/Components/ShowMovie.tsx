@@ -44,17 +44,13 @@ const ShowMovie = ({ movieDetail }: Props) => {
           mode === "home" &&
           !isFetchingRef.current
         ) {
-          // 🔒 lock to prevent multiple triggers
           isFetchingRef.current = true
-
-          // 🧠 debounce
           if (debounceRef.current) {
             clearTimeout(debounceRef.current)
           }
-
           debounceRef.current = setTimeout(() => {
             setpage((prev: number) => prev + 1)
-          }, 300) // adjust 200–500 if needed
+          }, 300) 
         }
       },
       {
@@ -72,7 +68,7 @@ const ShowMovie = ({ movieDetail }: Props) => {
     }
   }, [loading, mode])
 
-  // 🔓 unlock when loading finishes
+ 
   useEffect(() => {
     if (!loading) {
       isFetchingRef.current = false
@@ -82,7 +78,7 @@ const ShowMovie = ({ movieDetail }: Props) => {
   return (
     <div className="w-full min-h-screen">
       
-      {/* MOVIE GRID */}
+    
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 px-5 mt-10'>
         
         {loading
@@ -146,7 +142,7 @@ const ShowMovie = ({ movieDetail }: Props) => {
         )}
       </div>
 
-      {/* ✅ OBSERVER TARGET */}
+     
       <div
         ref={loaderRef}
         className="h-16 w-full flex justify-center items-center"
@@ -156,7 +152,7 @@ const ShowMovie = ({ movieDetail }: Props) => {
         )}
       </div>
 
-      {/* Pagination fallback */}
+   
      {movieDetail && (mode === "search" || mode === "filter") && <Page />}
     </div>
   )

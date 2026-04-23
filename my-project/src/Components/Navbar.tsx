@@ -6,8 +6,10 @@ import ContentSection from './ContentSection'
 import { movieContext } from '../Context/MovieContext'
 import { toast } from 'react-toastify'
 
+
 const Navbar = () => {
   const searchContext = useContext(movieContext)
+const apiKey = import.meta.env.API_KEY
 
   if (!searchContext) {
     throw new Error("shit cant search")
@@ -62,7 +64,7 @@ useEffect(() => {
         'https://api.themoviedb.org/3/search/movie',
         {
           params: {
-            api_key: '50e506c1eb5aff5ab14c27ea3bebb47e',
+            api_key: apiKey,
             query: movieName,
             page: page
           }
@@ -77,7 +79,7 @@ useEffect(() => {
             `https://api.themoviedb.org/3/movie/${movie.id}`,
             {
               params: {
-                api_key: '50e506c1eb5aff5ab14c27ea3bebb47e'
+                api_key: apiKey
               }
             }
           )

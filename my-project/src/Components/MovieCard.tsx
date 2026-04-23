@@ -19,13 +19,14 @@ interface cardProps {
 }
 
 const MovieCard = ({ movieDetail, onClose }: cardProps) => {
+  const apiKey = import.meta.env.API_KEY
   const [trailerKey, setTrailerKey] = useState<string | null>(null)
 
   const playTrailer = async (movieId: number) => {
     try {
       const res = await axios.get(
         `https://api.themoviedb.org/3/movie/${movieId}/videos`,
-        { params: { api_key: '50e506c1eb5aff5ab14c27ea3bebb47e' } }
+        { params: { api_key: apiKey } }
       )
       const trailer = res.data.results.find(
         (vid: any) => vid.type === 'Trailer' && vid.site === 'YouTube'

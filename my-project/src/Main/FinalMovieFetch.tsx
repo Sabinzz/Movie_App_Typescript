@@ -4,6 +4,7 @@ import { movieContext } from '../Context/MovieContext'
 import axios from 'axios'
 
 const FinalMovieFetch = () => {
+  const apiKey = import.meta.env.API_KEY
   const finalContext = useContext(movieContext)
   if (!finalContext) throw new Error("Context not found")
 
@@ -39,7 +40,7 @@ const FinalMovieFetch = () => {
     setloading(true)
 
     const params: any = {
-      api_key: "50e506c1eb5aff5ab14c27ea3bebb47e",
+      api_key: apiKey,
       page: page,
     }
 
@@ -66,7 +67,7 @@ const FinalMovieFetch = () => {
           const detailRes = await axios.get(
             `https://api.themoviedb.org/3/movie/${movie.id}`,
             {
-              params: { api_key: "50e506c1eb5aff5ab14c27ea3bebb47e" },
+              params: { api_key: apiKey },
             }
           )
 
