@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import NavImg from '../assets/Nav.png'
 import { Icon } from '@iconify/react'
 import axios from 'axios'
@@ -36,27 +36,36 @@ const apiKey = import.meta.env.VITE_API_KEY
   const [error, seterror] = useState<string | null>(null)
   const [openSearch, setOpenSearch] = useState(false)
 
+const prevMovieName = useRef(movieName)
+
 useEffect(() => {
   if (mode !== "search") return
-  if (!movieName.trim()) return
-    if (movieName.trim().length < 2) return
+  if (!movieName.trim() || movieName.trim().length < 2) return
 
-  const delayDebounce = setTimeout(() => {
-    handleMovieApi()
-  }, 1000)
+  const movieNameChanged = prevMovieName.current !== movieName
+  prevMovieName.current = movieName
 
-  return () => clearTimeout(delayDebounce)
-}, [movieName])
-useEffect(() => {
-  if (mode !== "search") return
-  if (!movieName.trim()) return
-  if (movieName.trim().length < 2) return
+  if (movieNameChanged) {
+    const delay = setTimeout(() => handleMovieApi(), 800)
+    return () => clearTimeout(delay)
+  } else {
+    handleMovieApi()  // page changed → immediate
+  }
+}, [movieName, page])
 
-  handleMovieApi()
-}, [page])
 
+const controllerRef = useRef<AbortController | null>(null)
   const handleMovieApi = async () => {
-    if (!movieName.trim()) return
+      if (!movieName.trim()) return
+     if (controllerRef.current) {
+    controllerRef.current.abort()
+    console.log('🔴 Aborted previous request')  // ← add this
+  }
+      const controller=new AbortController()
+    controllerRef.current=controller
+  
+      
+   
     setloading(true)
     seterror(null)
 
@@ -68,7 +77,9 @@ useEffect(() => {
             api_key: apiKey,
             query: movieName,
             page: page
-          }
+          },
+          signal:controller.signal,
+        
         }
       )
 
@@ -81,7 +92,8 @@ useEffect(() => {
             {
               params: {
                 api_key: apiKey
-              }
+              },
+              signal:controller.signal,
             }
           )
 
@@ -96,10 +108,13 @@ useEffect(() => {
       setloading(false)
       seterror(null)
 
-    } catch (error) {
-      setloading(false)
-      seterror('Unable to fetch movies. Please check your connection and try again.')
-    }
+    } catch (error: unknown) {
+  if (axios.isCancel?.(error)) return
+  if (error instanceof Error && (error.name === "CanceledError" || error.name === "AbortError")) return
+  
+  setloading(false)  // ← only runs for real errors
+  seterror('Unable to fetch movies...')
+}
   }
 
   return (

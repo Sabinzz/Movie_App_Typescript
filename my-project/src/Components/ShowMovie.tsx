@@ -23,50 +23,38 @@ const ShowMovie = ({ movieDetail }: Props) => {
   const showMovieContext = useContext(movieContext)
   if (!showMovieContext) throw new Error("Context error")
 
-  const { loading, setpage, mode } = showMovieContext
+  const { loading, setpage, mode,movieName } = showMovieContext
 
   const loaderRef = useRef<HTMLDivElement | null>(null)
 
  
   const isFetchingRef = useRef(false)
- const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
 
  
-  useEffect(() => {
-    if (mode !== "home") return
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const target = entries[0]
+useEffect(() => {
+  if (mode !== "home") return
+  
+  const observer = new IntersectionObserver(
+    (entries) => {
+      const target = entries[0]
 
-        if (
-          target.isIntersecting &&
-          !loading &&
-          mode === "home" &&
-          !isFetchingRef.current
-        ) {
-          isFetchingRef.current = true
-          if (debounceRef.current) {
-            clearTimeout(debounceRef.current)
-          }
-          debounceRef.current = setTimeout(() => {
-            setpage((prev: number) => prev + 1)
-          }, 300) 
-        }
-      },
-      {
-        root: null,
-        rootMargin: "300px",
-        threshold: 0,
+      if (target.isIntersecting && !loading && !isFetchingRef.current) {
+        isFetchingRef.current = true
+        setpage((prev: number) => prev + 1)
       }
-    )
-
-    const el = loaderRef.current
-    if (el) observer.observe(el)
-
-    return () => {
-      if (el) observer.unobserve(el)
+    },
+    {
+      root: null,
+      rootMargin: "300px",
+      threshold: 0,
     }
-  }, [loading, mode])
+  )
+
+  const el = loaderRef.current
+  if (el) observer.observe(el)
+  return () => { if (el) observer.unobserve(el) }
+}, [loading, mode])
 
  
   useEffect(() => {
@@ -77,11 +65,15 @@ const ShowMovie = ({ movieDetail }: Props) => {
 
   return (
     <div className="w-full min-h-screen">
-      
+      {movieDetail.length === 0 && !loading && movieName.trim().length >= 2 && (
+  <div className="text-center mt-10 text-(--text)">
+   No movies found for "<span className="font-semibold">{movieName}</span>"
+  </div>
+)}
     
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 px-5 mt-10'>
         
-        {loading
+        {loading && movieDetail.length === 0
           ? Array.from({ length: 12 }).map((_, index) => (
               <div key={index} className="animate-pulse">
                 <div className="h-[30vh] bg-gray-500 rounded-xl mt-5"></div>
