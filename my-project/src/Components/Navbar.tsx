@@ -49,7 +49,7 @@ useEffect(() => {
     const delay = setTimeout(() => handleMovieApi(), 800)
     return () => clearTimeout(delay)
   } else {
-    handleMovieApi()  // page changed → immediate
+    handleMovieApi()  
   }
 }, [movieName, page])
 
@@ -109,8 +109,12 @@ const controllerRef = useRef<AbortController | null>(null)
       seterror(null)
 
     } catch (error: unknown) {
-  if (axios.isCancel?.(error)) return
-  if (error instanceof Error && (error.name === "CanceledError" || error.name === "AbortError")) return
+  if (axios.isCancel?.(error)) {
+     setloading(false)
+    return}
+  if (error instanceof Error && (error.name === "CanceledError" || error.name === "AbortError")) {
+     setloading(false)
+    return}
   
   setloading(false)  // ← only runs for real errors
   seterror('Unable to fetch movies...')

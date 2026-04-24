@@ -65,7 +65,7 @@ useEffect(() => {
 
   return (
     <div className="w-full min-h-screen">
-      {movieDetail.length === 0 && !loading && movieName.trim().length >= 2 && (
+      {movieDetail.length === 0 && !loading &&  mode === "search" && movieName.trim().length >= 2 && (
   <div className="text-center mt-10 text-(--text)">
    No movies found for "<span className="font-semibold">{movieName}</span>"
   </div>
