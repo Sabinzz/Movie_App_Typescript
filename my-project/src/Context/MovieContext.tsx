@@ -31,6 +31,7 @@ settheme:React.Dispatch<React.SetStateAction<Theme>>
 setmode:React.Dispatch<React.SetStateAction<Mode>>
 mode:Mode;
 toggleTheme:()=>void
+
 }
 
 
@@ -46,8 +47,9 @@ const MovieContext = ({ children }: { children: React.ReactNode }) => {
   const [page, setpage] = useState<number>(1)
 const [loading, setloading] = useState<boolean>(false)
 const [isOlder, setisOlder] = useState<boolean>(false)
+
 const [theme, settheme] = useState<Theme>(()=>{
-  
+
  return (localStorage.getItem("theme") as Theme) || 'dark'
 })
 const[mode, setmode] = useState<Mode>("home")

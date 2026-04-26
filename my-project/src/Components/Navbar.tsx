@@ -1,18 +1,18 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useState, useRef } from 'react'
 import NavImg from '../assets/Nav.png'
 import { Icon } from '@iconify/react'
 import axios from 'axios'
 import ContentSection from './ContentSection'
 import { movieContext } from '../Context/MovieContext'
 import { toast } from 'react-toastify'
-
+import { useDebounce } from '../Hook/useDebounce'
 
 const Navbar = () => {
   const searchContext = useContext(movieContext)
-const apiKey = import.meta.env.VITE_API_KEY
+  const apiKey = import.meta.env.VITE_API_KEY
 
   if (!searchContext) {
-    throw new Error("shit cant search")
+    throw new Error("cant search")
   }
 
   const {
@@ -23,49 +23,55 @@ const apiKey = import.meta.env.VITE_API_KEY
     mode,
     setloading,
     theme,
-    toggleTheme
+    toggleTheme,
+    movieDetail, setmovieDetail, setmode, setselectedGenre, setselectedYear, setisOlder 
   } = searchContext
-
-  const context = useContext(movieContext)
-  if (!context) {
-    throw new Error("useMovieContext must be used inside MovieContextProvider")
-  }
-
-  const { movieDetail, setmovieDetail,setmode,setselectedGenre,setselectedYear,setisOlder } = context
 
   const [error, seterror] = useState<string | null>(null)
   const [openSearch, setOpenSearch] = useState(false)
-
-const prevMovieName = useRef(movieName)
-
-useEffect(() => {
-  if (mode !== "search") return
-  if (!movieName.trim() || movieName.trim().length < 2) return
-
-  const movieNameChanged = prevMovieName.current !== movieName
-  prevMovieName.current = movieName
-
-  if (movieNameChanged) {
-    const delay = setTimeout(() => handleMovieApi(), 800)
-    return () => clearTimeout(delay)
-  } else {
-    handleMovieApi()  
-  }
-}, [movieName, page])
-
-
-const controllerRef = useRef<AbortController | null>(null)
-  const handleMovieApi = async () => {
-      if (!movieName.trim()) return
-     if (controllerRef.current) {
-    controllerRef.current.abort()
-    console.log('🔴 Aborted previous request')  // ← add this
-  }
-      const controller=new AbortController()
-    controllerRef.current=controller
   
-      
-   
+  // Track previous debounced name to prevent duplicate calls
+  const previousDebouncedName = useRef('')
+
+  const debouncedMovieName = useDebounce(movieName, 600)
+
+  // Handle search query changes with debounce
+  useEffect(() => {
+    if (mode !== "search") return
+    
+    // Don't make API call if the debounced name hasn't actually changed
+    if (previousDebouncedName.current === debouncedMovieName) return
+    
+    previousDebouncedName.current = debouncedMovieName
+    
+    if (!debouncedMovieName.trim() || debouncedMovieName.trim().length < 2) {
+      // If search is cleared, reset to home mode
+      if (debouncedMovieName.trim() === "") {
+        setmode("home")
+      }
+      return
+    }
+
+    // Reset to page 1 and make API call
+    if (page !== 1) {
+      setpage(1)
+    } else {
+      handleMovieApi()
+    }
+  }, [debouncedMovieName])
+
+  // Handle page changes
+  useEffect(() => {
+    if (mode !== "search") return
+    if (!debouncedMovieName.trim() || debouncedMovieName.trim().length < 2) return
+    
+    // Only make API call if we have a valid search term
+    handleMovieApi()
+  }, [page])
+
+  const handleMovieApi = async () => {
+    if (!debouncedMovieName.trim()) return
+    
     setloading(true)
     seterror(null)
 
@@ -75,11 +81,9 @@ const controllerRef = useRef<AbortController | null>(null)
         {
           params: {
             api_key: apiKey,
-            query: movieName,
+            query: debouncedMovieName,
             page: page
           },
-          signal:controller.signal,
-        
         }
       )
 
@@ -93,7 +97,6 @@ const controllerRef = useRef<AbortController | null>(null)
               params: {
                 api_key: apiKey
               },
-              signal:controller.signal,
             }
           )
 
@@ -108,34 +111,21 @@ const controllerRef = useRef<AbortController | null>(null)
       setloading(false)
       seterror(null)
 
-    } catch (error: unknown) {
-  if (axios.isCancel?.(error)) {
-     setloading(false)
-    return}
-  if (error instanceof Error && (error.name === "CanceledError" || error.name === "AbortError")) {
-     setloading(false)
-    return}
-  
-  setloading(false)  // ← only runs for real errors
-  seterror('Unable to fetch movies...')
-}
+    } catch (error) {
+      setloading(false)
+      seterror('Unable to fetch movies...')
+    }
   }
 
   return (
     <div>
-     
       <div className='w-full h-20 bg-(--surface) text-white'>
         <div className='flex justify-between items-center h-full'>
-
-      
           <div>
             <img className={`h-8 ml-10 object-cover ${theme==='light'? 'invert' : ''}`} src={NavImg} alt="" />
           </div>
 
-        
           <div className='flex items-center gap-5 mr-5 md:mr-10'>
-
-       
             <button
               onClick={toggleTheme}
               className={`w-14 h-7 flex items-center rounded-full p-1 transition-all duration-300 
@@ -153,7 +143,6 @@ const controllerRef = useRef<AbortController | null>(null)
               </div>
             </button>
 
-        
             <div className="md:hidden text-(--text)">
               <Icon
                 icon="charm:search"
@@ -163,44 +152,37 @@ const controllerRef = useRef<AbortController | null>(null)
               />
             </div>
 
-           
             <div className='relative group hidden md:block'>
               <input
                 value={movieName}
                 type="text"
-                className='border h-11 text-black w-72 outline-none rounded-full border-black bg-(--elements) placeholder:text-(--text) hover:placeholder:text-black pl-12 pr-5 hover:bg-white  transition-all duration-500'
+                className='border h-11 text-black w-72 outline-none rounded-full border-black bg-(--elements) placeholder:text-(--text) hover:placeholder:text-black pl-12 pr-5 hover:bg-white transition-all duration-500'
                 placeholder='Enter keywords...'
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-  const value = e.target.value
-   setmovieName(value)
-                    if (value.trim() === "") {
-    setmode("home")  
-    return
-  }
-               
-                if (mode !== "search") {
-  setmode("search")
-  setselectedYear(null)
-  setisOlder(false)
-  setselectedGenre([])
-}
-
-               if (page !== 1) {
-    setpage(1)
-  }
+                  const value = e.target.value
+                  setmovieName(value)
+                  
+                  if (value.trim() === "") {
+                    setmode("home")  
+                    return
+                  }
+                 
+                  if (mode !== "search") {
+                    setmode("search")
+                    setselectedYear(null)
+                    setisOlder(false)
+                    setselectedGenre([])
+                  }
                 }}
-              
               />
 
               <Icon
                 icon="charm:search"
                 className='absolute top-1/2 left-4 -translate-y-1/2 text-(--text) group-hover:text-black transition-colors duration-200'
                 fontSize={20}
-             
               />
             </div>
 
-     
             <div
               onClick={() => toast("Under Production!!!!")}
               className='hidden md:flex items-center gap-1.5 cursor-pointer'
@@ -210,7 +192,6 @@ const controllerRef = useRef<AbortController | null>(null)
               </div>
               <h1 className='text-(--text)'>Login</h1>
             </div>
-
           </div>
         </div>
       </div>
@@ -223,7 +204,6 @@ const controllerRef = useRef<AbortController | null>(null)
 
       {openSearch && (
         <div className="fixed inset-0 z-50 bg-black/80 flex items-start pt-5 px-4">
-
           <div className="w-full relative">
             <input
               value={movieName}
@@ -232,38 +212,31 @@ const controllerRef = useRef<AbortController | null>(null)
               placeholder="Search movies..."
               className="w-full h-12 rounded-full pl-12 pr-12 outline-none text-black bg-white"
               onChange={(e) => {
-                  const value = e.target.value
-   setmovieName(value)
-                    if (value.trim() === "") {
-    setmode("home")  
-    return
-  }
-               
+                const value = e.target.value
+                setmovieName(value)
+                
+                if (value.trim() === "") {
+                  setmode("home")  
+                  return
+                }
+                 
                 if (mode !== "search") {
-  setmode("search")
-  setselectedYear(null)
-  setisOlder(false)
-  setselectedGenre([])
-}
-
-               if (page !== 1) {
-    setpage(1)
-  }
+                  setmode("search")
+                  setselectedYear(null)
+                  setisOlder(false)
+                  setselectedGenre([])
+                }
               }}
               onKeyDown={(e) => {
-  if (e.key === "Enter") {
-  
-    setOpenSearch(false) 
-  
-  }
-}}
-             
+                if (e.key === "Enter") {
+                  setOpenSearch(false) 
+                }
+              }}
             />
 
-            {/* SEARCH ICON */}
             <Icon
               icon="charm:search"
-              className="absolute  left-4 top-1/2 -translate-y-1/2 text-black"
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-black"
               fontSize={20}
               onClick={() => {
                 handleMovieApi()
@@ -271,22 +244,19 @@ const controllerRef = useRef<AbortController | null>(null)
               }}
             />
 
-            {/* CLOSE ICON */}
             <Icon
               icon="mdi:close"
               className="absolute right-4 top-1/2 -translate-y-1/2 text-black cursor-pointer"
               fontSize={22}
-              onClick={() => {setOpenSearch(false)
-setmovieName("")
-
+              onClick={() => {
+                setOpenSearch(false)
+                setmovieName("")
               }}
             />
           </div>
-
         </div>
       )}
 
-      {/* CONTENT */}
       <div>
         <ContentSection movieDetail={movieDetail} />
       </div>
