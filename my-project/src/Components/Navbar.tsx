@@ -167,12 +167,12 @@ const Navbar = () => {
                   setmovieName(value)
                 
                   
-                  if (value.trim() === "") {
+                  // if (value.trim() === "") {
                     
                    
-                      previousDebouncedName.current = "" 
-                    return
-                  }
+                  //     previousDebouncedName.current = "" 
+                  //   return
+                  // }
                  
                   if (mode !== "search") {
                     setmode("search")
