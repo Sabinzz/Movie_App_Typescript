@@ -33,26 +33,28 @@ const Navbar = () => {
   // Track previous debounced name to prevent duplicate calls
   const previousDebouncedName = useRef('')
 
-  const debouncedMovieName = useDebounce(movieName, 600)
 
-  // Handle search query changes with debounce
+
+
+  const debouncedMovieName = useDebounce(movieName, 500)
+ 
+
   useEffect(() => {
     if (mode !== "search") return
-    
-    // Don't make API call if the debounced name hasn't actually changed
-    if (previousDebouncedName.current === debouncedMovieName) return
-    
-    previousDebouncedName.current = debouncedMovieName
-    
+ 
     if (!debouncedMovieName.trim() || debouncedMovieName.trim().length < 2) {
-      // If search is cleared, reset to home mode
+
       if (debouncedMovieName.trim() === "") {
-        setmode("home")
+       
+          previousDebouncedName.current = ""
       }
       return
     }
+    if (previousDebouncedName.current === debouncedMovieName) return
+    
+    previousDebouncedName.current = debouncedMovieName
 
-    // Reset to page 1 and make API call
+
     if (page !== 1) {
       setpage(1)
     } else {
@@ -68,6 +70,8 @@ const Navbar = () => {
     // Only make API call if we have a valid search term
     handleMovieApi()
   }, [page])
+
+
 
   const handleMovieApi = async () => {
     if (!debouncedMovieName.trim()) return
@@ -161,9 +165,12 @@ const Navbar = () => {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   const value = e.target.value
                   setmovieName(value)
+                
                   
                   if (value.trim() === "") {
-                    setmode("home")  
+                    
+                   
+                      previousDebouncedName.current = "" 
                     return
                   }
                  
@@ -214,6 +221,7 @@ const Navbar = () => {
               onChange={(e) => {
                 const value = e.target.value
                 setmovieName(value)
+              
                 
                 if (value.trim() === "") {
                   setmode("home")  
@@ -255,7 +263,7 @@ const Navbar = () => {
             />
           </div>
         </div>
-      )}
+      )}  
 
       <div>
         <ContentSection movieDetail={movieDetail} />
