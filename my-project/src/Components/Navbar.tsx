@@ -223,10 +223,10 @@ const Navbar = () => {
                 setmovieName(value)
               
                 
-                if (value.trim() === "") {
-                  setmode("home")  
-                  return
-                }
+                // if (value.trim() === "") {
+                //   setmode("home")  
+                //   return
+                // }
                  
                 if (mode !== "search") {
                   setmode("search")
