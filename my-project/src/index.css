@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 [data-theme='dark']{
-     --bg: #0f1923;
-  --surface: #0F1622;
+  --bg: #020916;
+  --surface: #0A1220;
   --text: #ffffff;
   --text-muted: #485C67;
   --elements:#3F454E;

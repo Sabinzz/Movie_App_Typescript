@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from "react"
 
+
 interface Movie {
   id: number
   title: string
@@ -31,6 +32,7 @@ settheme:React.Dispatch<React.SetStateAction<Theme>>
 setmode:React.Dispatch<React.SetStateAction<Mode>>
 mode:Mode;
 toggleTheme:()=>void
+
 
 }
 

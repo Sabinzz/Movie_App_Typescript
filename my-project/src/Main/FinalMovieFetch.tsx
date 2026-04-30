@@ -1,12 +1,11 @@
-
-import { useContext, useEffect } from 'react'
-import { movieContext } from '../Context/MovieContext'
-import axios from 'axios'
+import { useContext, useEffect } from 'react';
+import { movieContext } from '../Context/MovieContext';
+import axios from 'axios';
 
 const FinalMovieFetch = () => {
-  const apiKey = import.meta.env.VITE_API_KEY
-  const finalContext = useContext(movieContext)
-  if (!finalContext) throw new Error("Context not found")
+  const apiKey = import.meta.env.VITE_API_KEY;
+  const finalContext = useContext(movieContext);
+  if (!finalContext) throw new Error("Context not found");
 
   const {
     isOlder,
@@ -17,89 +16,87 @@ const FinalMovieFetch = () => {
     selectedYear,
     setmovieDetail,
     setpage,
-   
     mode
-  } = finalContext
+  } = finalContext;
 
- 
   useEffect(() => {
     if (mode === "search") return;
-    fetchMovies()
-  }, [page, selectedGenre, selectedYear, isOlder,mode])
+    fetchMovies();
+  }, [page, selectedGenre, selectedYear, isOlder, mode]);
 
   useEffect(() => {
-  if (mode !== "search") {
-    setmovieDetail([])  
-    setpage(1)
-  }
-}, [mode])
+    if (mode !== "search") {
+      setmovieDetail([]);
+      setpage(1);
+    }
+  }, [mode]);
 
   async function fetchMovies() {
-    if (loading) return
+    if (loading) return;
 
-    setloading(true)
+    setloading(true);
 
     const params: any = {
       api_key: apiKey,
       page: page,
-    }
+    };
 
     if (selectedGenre.length) {
-      params.with_genres = selectedGenre.join(",")
+      params.with_genres = selectedGenre.join(",");
     }
 
     if (isOlder) {
-      params["primary_release_date.lte"] = "2022-01-01"
+      params["primary_release_date.lte"] = "2022-01-01";
     } else if (selectedYear) {
-      params.primary_release_year = selectedYear
+      params.primary_release_year = selectedYear;
     }
 
     try {
       const res = await axios.get(
         "https://api.themoviedb.org/3/discover/movie",
         { params }
-      )
+      );
 
-      const movies = res.data.results
+      console.log(`TMDB returned: ${res.data.results.length} movies (page ${page})`);
+
+      // === KEY CHANGE: Take only 16 movies ===
+      const movies = res.data.results.slice(0, 16);
+
+      console.log(`After slice(0,16): ${movies.length} movies`);
 
       const detailedMovies = await Promise.all(
         movies.map(async (movie: any) => {
           const detailRes = await axios.get(
             `https://api.themoviedb.org/3/movie/${movie.id}`,
-            {
-              params: { api_key: apiKey },
-            }
-          )
+            { params: { api_key: apiKey } }
+          );
 
           return {
             ...movie,
             runtime: detailRes.data.runtime,
-          }
+          };
         })
-      )
+      );
 
-    
-     setmovieDetail((prev: any[]) => {
-  const existingIds = new Set(prev.map(m => m.id))
-  const filtered = detailedMovies.filter(m => !existingIds.has(m.id))
+      setmovieDetail((prev: any[]) => {
+        const existingIds = new Set(prev.map((m) => m.id));
+        const newMovies = detailedMovies.filter((m) => !existingIds.has(m.id));
 
-  return mode === "home" && page > 1
-    ? [...prev, ...filtered]
-    : filtered
-})
+        console.log(`Adding ${newMovies.length} new movies to context`);
+
+        return mode === "home" && page > 1
+          ? [...prev, ...newMovies]
+          : newMovies;
+      });
 
     } catch (error) {
-      console.error("Fetch failed", error)
+      console.error("Fetch failed", error);
     } finally {
-      setloading(false)
+      setloading(false);
     }
   }
 
-  return (
-    <div>
-    
-    </div>
-  )
-}
+  return <div />;
+};
 
-export default FinalMovieFetch
+export default FinalMovieFetch;

@@ -10,6 +10,7 @@ useEffect(() => {
   return () => clearTimeout(timeout)
   
 }, [value,delay])
+console.log("debounced value",debouncedValue)
 return debouncedValue
 
 }

@@ -1,17 +1,27 @@
-import { Icon } from '@iconify/react'
-import {  useState } from 'react'
-import Filter from './Filter'
-import ShowMovie from './ShowMovie'
-
+import { Icon } from '@iconify/react';
+import { useContext, useState } from 'react';
+import Filter from './Filter';
+import ShowMovie from './ShowMovie';
+import { movieContext } from '../Context/MovieContext';
 
 interface MovieDetailProps {
-  movieDetail: any[]
+  movieDetail: any[];
+  debouncedMovieName: string;
 }
 
-const ContentSection = ({ movieDetail }: MovieDetailProps) => {
-  const [filter, setfilter] = useState<boolean>(false)
+const ContentSection = ({ movieDetail, debouncedMovieName }: MovieDetailProps) => {
+  const [filter, setfilter] = useState<boolean>(false);
+  const contentContext = useContext(movieContext);
 
- 
+  if (!contentContext) {
+    throw new Error('Content not found');
+  }
+
+  const { mode, loading } = contentContext;   // ← added loading (recommended)
+
+  const hasSearchTerm = !!debouncedMovieName?.trim();
+  const isInSearchMode = mode === "search";
+  const hasResults = Array.isArray(movieDetail) && movieDetail.length > 0;
 
   return (
     <div className='bg-(--bg) text-(--text) min-h-screen w-full'>
@@ -19,22 +29,40 @@ const ContentSection = ({ movieDetail }: MovieDetailProps) => {
       <div className='flex justify-between px-10 pt-5'>
         
         <div>
-        
-            <h1 className='text-(--text) border-b border-gray-600 text-2xl'>
-             Movies:
+          {/* 1. Popular Movies → only show when we are clearly in home mode */}
+          {mode === "home" && !isInSearchMode && (
+            <h1 className="text-(--text)">Popular Movies</h1>
+          )}
+
+          {/* 2. Search Results Heading */}
+          {isInSearchMode && hasSearchTerm && (
+            <h1 className="text-(--text)">
+              {loading 
+                ? `Searching for "${debouncedMovieName}"...`
+                : hasResults 
+                  ? `Search Results for: "${debouncedMovieName}"`
+                  : `No results found for: "${debouncedMovieName}"`
+              }
             </h1>
-     
+          )}
+
+          {/* 3. Filter Mode */}
+          {mode === "filter" && (
+            <h1 className="text-(--text)">Browsing by Filter</h1>
+          )}
         </div>
 
+        {/* Filter Button - Always visible as you want */}
         <div
           onClick={() => setfilter(!filter)}
-          className='h-7 cursor-pointer w-20 bg-[#141E2D] flex items-center pl-2 gap-1'
+          className='h-7 cursor-pointer w-20 bg-[#141E2D] flex items-center pl-2 gap-1 hover:bg-[#1e2a3d] transition-colors'
         >
           <Icon className='text-zinc-200' fontSize={16} icon="mdi:filter" />
           <h1 className='text-zinc-200 text-sm'>FILTER</h1>
         </div>
       </div>
 
+      {/* Filter Panel */}
       <div
         className={`px-2 overflow-hidden transition-all duration-300 ease-in-out ${
           filter ? "max-h-96 opacity-100 mt-4" : "max-h-0 opacity-0"
@@ -43,12 +71,12 @@ const ContentSection = ({ movieDetail }: MovieDetailProps) => {
         <Filter />
       </div>
 
+      {/* Movies */}
       <div>
         <ShowMovie movieDetail={movieDetail} />
       </div>
-
     </div>
-  )
-}
+  );
+};
 
-export default ContentSection
+export default ContentSection;

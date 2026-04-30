@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState, useRef } from 'react'
-import NavImg from '../assets/Nav.png'
+import navLight from '../assets/cinenest-light.png'
+import navDark from '../assets/cinenest-dark.png'
 import { Icon } from '@iconify/react'
 import axios from 'axios'
 import ContentSection from './ContentSection'
@@ -29,13 +30,8 @@ const Navbar = () => {
 
   const [error, seterror] = useState<string | null>(null)
   const [openSearch, setOpenSearch] = useState(false)
-  
   // Track previous debounced name to prevent duplicate calls
   const previousDebouncedName = useRef('')
-
-
-
-
   const debouncedMovieName = useDebounce(movieName, 500)
  
 
@@ -43,18 +39,13 @@ const Navbar = () => {
     if (mode !== "search") return
  
     if (!debouncedMovieName.trim() || debouncedMovieName.trim().length < 2) {
-
-      if (debouncedMovieName.trim() === "") {
-       
+      if (debouncedMovieName.trim() === "") { 
           previousDebouncedName.current = ""
       }
       return
     }
     if (previousDebouncedName.current === debouncedMovieName) return
-    
     previousDebouncedName.current = debouncedMovieName
-
-
     if (page !== 1) {
       setpage(1)
     } else {
@@ -70,7 +61,15 @@ const Navbar = () => {
     // Only make API call if we have a valid search term
     handleMovieApi()
   }, [page])
-
+const handleGoHome = () => {
+  setmode("home")
+  setmovieName("")
+  setselectedGenre([])
+  setselectedYear(null)
+  setisOlder(false)
+  setpage(1)
+  setmovieDetail([]) // optional but recommended
+}
 
 
   const handleMovieApi = async () => {
@@ -110,6 +109,8 @@ const Navbar = () => {
           }
         })
       )
+         console.log("API returned:", detailedMovies.length)
+console.log("After slice:", detailedMovies.slice(0,16).length)
 
       setmovieDetail(detailedMovies)
       setloading(false)
@@ -120,13 +121,27 @@ const Navbar = () => {
       seterror('Unable to fetch movies...')
     }
   }
-
+console.log("navbar debouncedMovieName:", debouncedMovieName)
   return (
     <div>
-      <div className='w-full h-20 bg-(--surface) text-white'>
-        <div className='flex justify-between items-center h-full'>
+      <div className='w-full h-22 bg-(--surface) text-white'>
+        <div className='flex justify-between items-center h-full gap-20'>
           <div>
-            <img className={`h-8 ml-10 object-cover ${theme==='light'? 'invert' : ''}`} src={NavImg} alt="" />
+            {/* <img className={`h-8 ml-10 object-cover ${theme==='light'? 'invert' : ''}`} src={NavImg} alt="" /> */}
+           <img
+             onClick={handleGoHome}
+           className='h-12 ml-10 object-cover cursor-pointer' src={theme==='light' ? navLight:navDark} alt="" />
+          </div>
+          <div className='text-(--text) flex gap-18 flex-1 items-center'>
+          <div onClick={handleGoHome} className='hover:text-[#79C142] cursor-pointer'>
+            <h1>Home</h1>
+          </div>
+          <div className='hover:text-[#79C142] cursor-pointer'>
+            <h1>Genre</h1>
+          </div>
+          <div className='hover:text-[#79C142] cursor-pointer'>
+            <h1>Select Year</h1>
+          </div>
           </div>
 
           <div className='flex items-center gap-5 mr-5 md:mr-10'>
@@ -266,7 +281,7 @@ const Navbar = () => {
       )}  
 
       <div>
-        <ContentSection movieDetail={movieDetail} />
+        <ContentSection movieDetail={movieDetail} debouncedMovieName={debouncedMovieName} />
       </div>
     </div>
   )
