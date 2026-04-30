@@ -6,10 +6,10 @@ import { movieContext } from '../Context/MovieContext';
 
 interface MovieDetailProps {
   movieDetail: any[];
-  debouncedMovieName: string;
+  searchMovieName: string;
 }
 
-const ContentSection = ({ movieDetail, debouncedMovieName }: MovieDetailProps) => {
+const ContentSection = ({ movieDetail, searchMovieName }: MovieDetailProps) => {
   const [filter, setfilter] = useState<boolean>(false);
   const contentContext = useContext(movieContext);
 
@@ -17,10 +17,10 @@ const ContentSection = ({ movieDetail, debouncedMovieName }: MovieDetailProps) =
     throw new Error('Content not found');
   }
 
-  const { mode, loading } = contentContext;   // ← added loading (recommended)
+  const { displayMode } = contentContext;
 
-  const hasSearchTerm = !!debouncedMovieName?.trim();
-  const isInSearchMode = mode === "search";
+  const hasSearchTerm = !!searchMovieName?.trim();
+  const isShowingSearchResults = displayMode === "search";
   const hasResults = Array.isArray(movieDetail) && movieDetail.length > 0;
 
   return (
@@ -29,26 +29,24 @@ const ContentSection = ({ movieDetail, debouncedMovieName }: MovieDetailProps) =
       <div className='flex justify-between px-10 pt-5'>
         
         <div>
-          {/* 1. Popular Movies → only show when we are clearly in home mode */}
-          {mode === "home" && !isInSearchMode && (
-            <h1 className="text-(--text)">Popular Movies</h1>
+          {/* 1. Popular Movies */}
+          {displayMode === "home" && (
+            <h1 className="text-(--text) text-xl">Popular Movies</h1>
           )}
 
           {/* 2. Search Results Heading */}
-          {isInSearchMode && hasSearchTerm && (
-            <h1 className="text-(--text)">
-              {loading 
-                ? `Searching for "${debouncedMovieName}"...`
-                : hasResults 
-                  ? `Search Results for: "${debouncedMovieName}"`
-                  : `No results found for: "${debouncedMovieName}"`
+          {isShowingSearchResults && hasSearchTerm && (
+            <h1 className="text-(--text) text-xl">
+              {hasResults
+                  ? `Search Results for: "${searchMovieName}"`
+                  : `No results found for: "${searchMovieName}"`
               }
             </h1>
           )}
 
           {/* 3. Filter Mode */}
-          {mode === "filter" && (
-            <h1 className="text-(--text)">Browsing by Filter</h1>
+          {displayMode === "filter" && (
+            <h1 className="text-(--text) text-xl">Browsing by Filter</h1>
           )}
         </div>
 

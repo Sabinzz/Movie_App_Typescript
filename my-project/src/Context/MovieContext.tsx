@@ -31,6 +31,8 @@ theme:Theme
 settheme:React.Dispatch<React.SetStateAction<Theme>>
 setmode:React.Dispatch<React.SetStateAction<Mode>>
 mode:Mode;
+displayMode:Mode;
+setdisplayMode:React.Dispatch<React.SetStateAction<Mode>>
 toggleTheme:()=>void
 
 
@@ -55,6 +57,7 @@ const [theme, settheme] = useState<Theme>(()=>{
  return (localStorage.getItem("theme") as Theme) || 'dark'
 })
 const[mode, setmode] = useState<Mode>("home")
+const[displayMode, setdisplayMode] = useState<Mode>("home")
 
 
 useEffect(() => {
@@ -69,7 +72,7 @@ const toggleTheme=()=>{
 
 
   return (
-    <movieContext.Provider value={{mode,setmode,theme,toggleTheme,settheme,  isOlder, setisOlder, loading, setloading,setpage,page,movieDetail, setmovieDetail,selectedGenre, setselectedGenre,selectedYear,setselectedYear,movieName, setmovieName }}>
+    <movieContext.Provider value={{mode,setmode,displayMode,setdisplayMode,theme,toggleTheme,settheme,  isOlder, setisOlder, loading, setloading,setpage,page,movieDetail, setmovieDetail,selectedGenre, setselectedGenre,selectedYear,setselectedYear,movieName, setmovieName }}>
       {children}
     </movieContext.Provider>
   )

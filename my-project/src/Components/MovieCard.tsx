@@ -49,9 +49,9 @@ const MovieCard = ({ movieDetail, onClose }: cardProps) => {
       <div
       id='movieCardScroll'
         onClick={(e) => e.stopPropagation()}
-        className="w-[80vw] sm:w-[69vw] h-[90vh] lg:h-[97vh] overflow-y-auto bg-[#020916] rounded-xl flex flex-col"
+        className="w-[94vw] sm:w-[80vw] lg:w-[69vw] h-[80vh] lg:h-[97vh] overflow-y-auto bg-[#020916] rounded-xl flex flex-col"
       >
-        <div className="relative w-full flex-1">
+        <div className="relative w-full aspect-video">
           {trailerKey ? (
             <>
               <iframe
@@ -93,7 +93,7 @@ const MovieCard = ({ movieDetail, onClose }: cardProps) => {
         </div>
 
      
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3 px-3 sm:px-5 py-4 bg-[#020916]">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 px-3 mt-3 sm:px-5 py-4 bg-[#020916]">
           <button
             onClick={() => playTrailer(movieDetail.id)}
             className="flex items-center gap-1 px-3 sm:px-4 h-9 sm:h-10 bg-white text-black rounded-sm cursor-pointer font-semibold text-sm sm:text-lg whitespace-nowrap"

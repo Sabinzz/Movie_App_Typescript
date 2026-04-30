@@ -25,11 +25,12 @@ const Navbar = () => {
     setloading,
     theme,
     toggleTheme,
-    movieDetail, setmovieDetail, setmode, setselectedGenre, setselectedYear, setisOlder 
+    movieDetail, setmovieDetail, setmode, setdisplayMode, setselectedGenre, setselectedYear, setisOlder
   } = searchContext
 
   const [error, seterror] = useState<string | null>(null)
   const [openSearch, setOpenSearch] = useState(false)
+  const [displaySearchName, setDisplaySearchName] = useState("")
   // Track previous debounced name to prevent duplicate calls
   const previousDebouncedName = useRef('')
   const debouncedMovieName = useDebounce(movieName, 500)
@@ -63,17 +64,20 @@ const Navbar = () => {
   }, [page])
 const handleGoHome = () => {
   setmode("home")
+  setdisplayMode("home")
   setmovieName("")
   setselectedGenre([])
   setselectedYear(null)
   setisOlder(false)
   setpage(1)
   setmovieDetail([]) // optional but recommended
+  setDisplaySearchName("")
 }
 
 
   const handleMovieApi = async () => {
-    if (!debouncedMovieName.trim()) return
+    const searchTerm = debouncedMovieName.trim()
+    if (!searchTerm) return
     
     setloading(true)
     seterror(null)
@@ -84,7 +88,7 @@ const handleGoHome = () => {
         {
           params: {
             api_key: apiKey,
-            query: debouncedMovieName,
+            query: searchTerm,
             page: page
           },
         }
@@ -113,6 +117,8 @@ const handleGoHome = () => {
 console.log("After slice:", detailedMovies.slice(0,16).length)
 
       setmovieDetail(detailedMovies)
+      setdisplayMode("search")
+      setDisplaySearchName(searchTerm)
       setloading(false)
       seterror(null)
 
@@ -131,17 +137,6 @@ console.log("navbar debouncedMovieName:", debouncedMovieName)
            <img
              onClick={handleGoHome}
            className='h-12 ml-10 object-cover cursor-pointer' src={theme==='light' ? navLight:navDark} alt="" />
-          </div>
-          <div className='text-(--text) flex gap-18 flex-1 items-center'>
-          <div onClick={handleGoHome} className='hover:text-[#79C142] cursor-pointer'>
-            <h1>Home</h1>
-          </div>
-          <div className='hover:text-[#79C142] cursor-pointer'>
-            <h1>Genre</h1>
-          </div>
-          <div className='hover:text-[#79C142] cursor-pointer'>
-            <h1>Select Year</h1>
-          </div>
           </div>
 
           <div className='flex items-center gap-5 mr-5 md:mr-10'>
@@ -281,7 +276,7 @@ console.log("navbar debouncedMovieName:", debouncedMovieName)
       )}  
 
       <div>
-        <ContentSection movieDetail={movieDetail} debouncedMovieName={debouncedMovieName} />
+        <ContentSection movieDetail={movieDetail} searchMovieName={displaySearchName} />
       </div>
     </div>
   )

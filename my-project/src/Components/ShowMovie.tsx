@@ -24,7 +24,7 @@ const ShowMovie = ({ movieDetail }: Props) => {
   const showMovieContext = useContext(movieContext)
   if (!showMovieContext) throw new Error("Context error")
 
-  const { loading, setpage, mode, movieName } = showMovieContext
+  const { loading, setpage, mode, displayMode, movieName } = showMovieContext
 
   const loaderRef = useRef<HTMLDivElement | null>(null)
   const isFetchingRef = useRef(false)
@@ -32,11 +32,11 @@ const ShowMovie = ({ movieDetail }: Props) => {
   // Reset when new data (search / mode change)
   useEffect(() => {
     setVisibleCount(16)
-  }, [movieName, mode])
+  }, [movieName, displayMode])
 
   // Infinite scroll
   useEffect(() => {
-    if (mode !== "home") return
+    if (mode !== "home" || displayMode !== "home") return
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -65,7 +65,7 @@ const ShowMovie = ({ movieDetail }: Props) => {
     return () => {
       if (el) observer.unobserve(el)
     }
-  }, [loading, mode])
+  }, [loading, mode, displayMode])
 
   useEffect(() => {
     if (!loading) {
@@ -81,14 +81,15 @@ console.log("visibleMovies:", visibleMovies.length)
     <div className="w-full min-h-screen">
 
       {/* No results */}
-      {movieDetail.length === 0 && !loading && mode === "search" && movieName.trim().length >= 2 && (
+      {/* {movieDetail.length === 0 && !loading && displayMode === "search" && movieName.trim().length >= 2 && (
         <div className="text-center mt-10 text-(--text)">
           No movies found for "<span className="font-semibold">{movieName}</span>"
         </div>
-      )}
+      )} */}
 
       {/* GRID */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-4 px-5 mt-10">
+<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 px-3 sm:px-5 mt-10">
+
 
         {/* Skeleton */}
         {loading && movieDetail.length === 0
@@ -161,7 +162,7 @@ console.log("visibleMovies:", visibleMovies.length)
       </div>
 
       {/* Pagination */}
-      {movieDetail && (mode === "search" || mode === "filter") && <Page />}
+      {movieDetail && (displayMode === "search" || displayMode === "filter") && <Page />}
     </div>
   )
 }
