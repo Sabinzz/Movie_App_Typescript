@@ -89,12 +89,13 @@ const handleGoHome = () => {
           params: {
             api_key: apiKey,
             query: searchTerm,
-            page: page
+            page: page,
+              include_adult: false, 
           },
         }
       )
 
-      const movies = res.data.results
+    const movies = res.data.results.filter((m: any) => !m.adult) 
 
       const detailedMovies = await Promise.all(
         movies.map(async (movie: any) => {

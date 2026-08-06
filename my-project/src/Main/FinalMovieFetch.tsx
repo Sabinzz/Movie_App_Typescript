@@ -47,6 +47,10 @@ const FinalMovieFetch = () => {
       const params: any = {
         api_key: apiKey,
         page: discoverPage,
+          include_adult: false,         
+    certification_country: 'US',
+  'vote_count.gte': 10,   
+    sort_by: 'popularity.desc',
       };
 
       if (selectedGenre.length) {
@@ -86,6 +90,7 @@ const FinalMovieFetch = () => {
           console.log(`TMDB returned: ${res.data.results.length} movies (page ${discoverPage})`);
 
           for (const movie of res.data.results) {
+              if (movie.adult) continue
             if (!existingIds.has(movie.id)) {
               existingIds.add(movie.id);
               movies.push(movie);
@@ -105,7 +110,7 @@ const FinalMovieFetch = () => {
         );
 
         console.log(`TMDB returned: ${res.data.results.length} movies (page ${page})`);
-        movies = res.data.results.slice(0, MOVIES_PER_PAGE);
+        movies = res.data.results .filter((m: any) => !m.adult).slice(0, MOVIES_PER_PAGE);
       }
 
       const detailedMovies = await Promise.all(
