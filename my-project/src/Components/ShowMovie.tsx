@@ -19,6 +19,16 @@ interface Props {
 
 const ShowMovie = ({ movieDetail }: Props) => {
   const [showMovieCard, setshowMovieCard] = useState<Movie | null>(null)
+  useEffect(() => {
+  if (showMovieCard) {
+    document.body.style.overflow = 'hidden'
+  } else {
+    document.body.style.overflow = ''
+  }
+  return () => {
+    document.body.style.overflow = ''
+  }
+}, [showMovieCard])
   const [visibleCount, setVisibleCount] = useState(16)
 
   const showMovieContext = useContext(movieContext)
