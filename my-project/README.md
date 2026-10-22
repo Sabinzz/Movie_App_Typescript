@@ -1,73 +1,27 @@
-# React + TypeScript + Vite
+# CineNest
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+CineNest combines the movie browser with the login, registration, password reset, and session API from the Login-Form project. The movie app is available at `/dashboard` after signing in.
 
-Currently, two official plugins are available:
+## Setup
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+1. Install Node.js 20.9 or later and PostgreSQL.
+2. Copy `.env.example` to `.env` and fill in the database URL, a private JWT secret, and a TMDB API key. Add Resend credentials to enable password reset emails.
+3. Install dependencies with `npm install`.
+4. Generate the Prisma client and apply the included migrations:
 
-## React Compiler
+   ```bash
+   npm run db:generate
+   npm run db:migrate
+   ```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+5. Start CineNest with `npm run dev`, then open [http://localhost:3000](http://localhost:3000).
 
-## Expanding the ESLint configuration
+New visitors can create an account from the login screen. Signing in or registering takes them to the protected movie browser. Sign out returns to the login screen.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Environment variables
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- `DATABASE_URL`: PostgreSQL connection string for user accounts and password reset tokens.
+- `JWT_SECRET`: private signing key used for the HttpOnly session cookie.
+- `NEXT_PUBLIC_TMDB_API_KEY`: TMDB API key used by the movie browser.
+- `NEXT_PUBLIC_APP_URL`: public CineNest URL used in password reset links.
+- `RESEND_API_KEY` and `RESEND_FROM_EMAIL`: email delivery settings for password resets.

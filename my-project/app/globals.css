@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+:root { --background: #020916; --foreground: #ffffff; }
+[data-theme='dark'] { --bg: #020916; --surface: #0A1220; --text: #ffffff; --text-muted: #485C67; --elements: #3F454E; }
+[data-theme='light'] { --bg: #f5f5f5; --surface: #ffffff; --text: #1a1a1a; --text-muted: #6b7280; --elements: #c1c4c9; }
+html, body { min-height: 100%; }
+body { margin: 0; overflow-x: hidden; background: var(--background); color: var(--foreground); font-family: Arial, Helvetica, sans-serif; }
+#movieCardScroll::-webkit-scrollbar { display: none; }
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #020916; }
+::-webkit-scrollbar-thumb { background: #444; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #666; }
