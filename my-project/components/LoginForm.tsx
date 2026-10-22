@@ -33,23 +33,32 @@ export default function LoginForm() {
     e.preventDefault();
     setLoginLoading(true);
     setLoginError("");
-    const res = await fetch("/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: loginEmail,
-        password: loginPassword,
-        rememberMe,
-      }),
-    });
-    const data = await res.json();
-    if (!res.ok) {
-      setLoginError(data.error || "Login failed");
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: loginEmail,
+          password: loginPassword,
+          rememberMe,
+        }),
+        signal: AbortSignal.timeout(15000),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setLoginError(data.error || "Login failed");
+        return;
+      }
+      window.location.href = "/dashboard";
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "TimeoutError") {
+        setLoginError("Sign in timed out. Please try again.");
+      } else {
+        setLoginError("Unable to reach the sign-in service. Please try again.");
+      }
+    } finally {
       setLoginLoading(false);
-      return;
     }
-    setLoginLoading(false);
-    window.location.href = "/dashboard";
   };
 
   const handleSignup = async (e: React.FormEvent) => {
