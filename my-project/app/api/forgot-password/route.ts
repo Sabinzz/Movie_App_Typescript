@@ -14,7 +14,8 @@ export async function POST(req: NextRequest) {
   }
 
   // Find user — don't reveal if email exists or not (security)
-  const user = await prisma.user.findUnique({ where: { email } });
+  const normalizedEmail = email.trim().toLowerCase();
+  const user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
 
   if (user) {
     // Delete any existing reset tokens for this user

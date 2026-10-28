@@ -152,9 +152,6 @@ const handleGoHome = () => {
           }
         })
       )
-         console.log("API returned:", detailedMovies.length)
-console.log("After slice:", detailedMovies.slice(0,16).length)
-
       setmovieDetail(detailedMovies)
       setdisplayMode("search")
       setDisplaySearchName(searchTerm)
@@ -166,7 +163,7 @@ console.log("After slice:", detailedMovies.slice(0,16).length)
       seterror('Unable to fetch movies...')
     }
   }
-console.log("navbar debouncedMovieName:", debouncedMovieName)
+
   return (
     <div>
       <div className='w-full h-22 bg-(--surface) text-white'>

@@ -19,6 +19,10 @@ export function NeuInput({
   autoComplete?: string;
 }) {
   const [focused, setFocused] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const isPassword = type === "password";
+  const inputType = isPassword ? (showPassword ? "text" : "password") : type;
 
   return (
     <div className="relative mb-[18px]">
@@ -27,14 +31,14 @@ export function NeuInput({
         className={`absolute left-[18px] top-1/2 -translate-y-1/2 text-[15px] z-[2] transition-colors duration-[350ms] ${focused ? "text-[#a10f0f]" : "text-[#909090]"}`}
       />
       <input
-        type={type}
+        type={inputType}
         placeholder={placeholder}
         value={value}
         onChange={(event) => onChange(event.target.value)}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         autoComplete={autoComplete}
-        className="w-full h-[46px] pl-[45px] pr-[18px] border-none outline-none rounded-[12px] bg-[#e8e8e8] text-[#4a4a4a] text-[14.5px] font-medium tracking-[0.2px] placeholder-[#a3a3a3] transition-all duration-[400ms]"
+        className={`w-full h-[46px] pl-[45px] ${isPassword ? "pr-[46px]" : "pr-[18px]"} border-none outline-none rounded-[12px] bg-[#e8e8e8] text-[#4a4a4a] text-[14.5px] font-medium tracking-[0.2px] placeholder-[#a3a3a3] transition-all duration-[400ms]`}
         style={{
           boxShadow: focused
             ? "inset 3px 3px 6px rgba(120,10,10,0.35), inset -3px -3px 6px rgba(212,55,55,0.25)"
@@ -43,6 +47,20 @@ export function NeuInput({
           fontFamily: "Poppins, sans-serif",
         }}
       />
+      {isPassword && (
+        <button
+          type="button"
+          onClick={() => setShowPassword((prev) => !prev)}
+          className="absolute right-[14px] top-1/2 -translate-y-1/2 z-[2] p-1 text-[#909090] hover:text-[#a10f0f] transition-colors duration-200 bg-transparent border-none cursor-pointer flex items-center justify-center"
+          title={showPassword ? "Hide password" : "Show password"}
+          tabIndex={-1}
+        >
+          <Icon
+            icon={showPassword ? "mdi:eye-off-outline" : "mdi:eye-outline"}
+            className="text-[19px]"
+          />
+        </button>
+      )}
     </div>
   );
 }
