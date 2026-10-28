@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Next.js
+.next/
+*/.next/
+out/
+next-env.d.ts
+*/next-env.d.ts
+
+# Generated Prisma Client
+generated/
+*/generated/
+
+# Environment variables
+.env
+.env.*
+*.env
+*.env.*
+!.env.example
+!*/.env.example
+
+# Build files & caches
+dist/
+*.tsbuildinfo
+.vscode/*
+!.vscode/extensions.json
+
+# Leftover / scratch directories from migration
+cinenest/
+login-form/
+backend
+frontend
+
+# OS files
+.DS_Store
+Thumbs.db
