@@ -3,7 +3,10 @@ import { prisma } from "@/lib/prisma";
 import { Resend } from "resend";
 import crypto from "crypto";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+function getResend() {
+  const key = process.env.RESEND_API_KEY;
+  return key ? new Resend(key) : null;
+}
 const fromEmail = process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev";
 
 export async function POST(req: NextRequest) {
@@ -34,6 +37,15 @@ export async function POST(req: NextRequest) {
     const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL}/reset-password?token=${token}`;
 
     try {
+      const resend = getResend();
+      if (!resend) {
+        console.error("Password reset email failed: RESEND_API_KEY is not configured");
+        return NextResponse.json(
+          { error: "Unable to send the reset email right now" },
+          { status: 502 },
+        );
+      }
+
       const { error } = await resend.emails.send({
         from: fromEmail,
         to: email,
